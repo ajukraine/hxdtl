@@ -1,6 +1,6 @@
 package hxdtl;
 
-typedef AstTree =
+typedef Ast =
 {
 	body: Array<AstExpr>
 }

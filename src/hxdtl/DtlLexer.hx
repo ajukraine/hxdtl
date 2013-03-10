@@ -16,9 +16,10 @@ class DtlLexer extends Lexer implements hxparse.RuleBuilder
 	public static var tok = @:rule
 	[
 		"" => tk(Eof),
+		"." => tk(Dot),
 		"[\r\n\t ]" => lexer.token(tok),
 		
-		"[^({|})]*" => {
+		"[^{|}|.]*" => {
 			var cur = lexer.current;
 			var kwd = keywords.get(cur);
 

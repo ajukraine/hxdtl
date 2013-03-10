@@ -5,13 +5,14 @@ import hxdtl.Ast;
 
 class DtlParser extends hxparse.Parser<Token> 
 {
-	public function new(input: haxe.io.Input)
+	public function new()
 	{
-		super(new hxparse.LexerStream(new DtlLexer(input), DtlLexer.tok));
+		super(null);
 	}
 
-	public function parse()
+	public function parse(input: haxe.io.Input)
 	{
+		stream = new hxparse.LexerStream(new DtlLexer(input), DtlLexer.tok);
 		return
 		{
 			body: loop(parseElement, [])
@@ -34,14 +35,50 @@ class DtlParser extends hxparse.Parser<Token>
 		}
 	}
 
-	function parseElement() 
+	function opt<T>(f:T->T, fallback: T = null): Null<T>
+	{
+		return switch stream
+		{
+			case [v = f(fallback)]: v;
+			case _: fallback;
+		}
+	}
+
+	function parseElement()
 	{
 		return switch stream
 		{
 			case [{tok: Text(t)}]:
 				AstExpr.Text(t);
-			case [{tok: VarOpen}, {tok: Identifier(identifier)}, {tok: VarClose}]:
-				AstExpr.Variable(identifier);
+			case [{tok: VarOpen}, value = parseValue(), {tok: VarClose}]:
+				value;
+		}
+	}
+
+	function parseValue()
+	{
+		return switch stream
+		{
+			case [variable = parseVariable()]:
+				variable;
+		}
+	}
+
+	function parseVariable()
+	{
+		return switch stream
+		{
+			case [{tok: Identifier(identifier)}, expr = opt(parseAttribute, AstExpr.Variable(identifier))]:
+				expr;
+		}
+	}
+
+	function parseAttribute(outExpr)
+	{
+		return switch stream
+		{
+			case [{tok: Dot}, {tok: Identifier(identifier)}, expr = opt(parseAttribute, Attribute(outExpr, identifier))]:
+				expr;
 		}
 	}
 }

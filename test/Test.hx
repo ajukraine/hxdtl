@@ -2,37 +2,59 @@ import haxe.io.StringInput;
 import hxdtl.DtlParser;
 import hxdtl.DtlInterpreter;
 
-class Test 
+class Test
 {
+	var templatesPath: String;
+	var interpreter: DtlInterpreter;
+	var parser: DtlParser;
+
+	public function new(templatesPath: String)
+	{
+		this.interpreter = new DtlInterpreter();
+		this.parser = new DtlParser();
+		this.templatesPath = templatesPath;
+	}
+
 	static function main()
 	{
 		trace("hxDtl - Haxe implmentation of Django Template Language");
 
-		var input = new StringInput("Hello, Haxe! I'm from {{Country}}.");
-		var parser = new DtlParser(input);
-		var context =
-		{
-			Country: "Ukraine"
-		};
-
-		var interpreter = new DtlInterpeter();
-
-		trace("[Template]");
-		trace(input);
-
-		trace("[Interpreted]");
-		trace(interpreter.run(parser.parse(), toMap(context)));
+		var test = new Test("test/templates/");
+		test.run();
 	}
 
-	static function toMap(obj)
+	static function map<T>(obj: T)
 	{
-		var map = new Map<String, Dynamic>();
-
+		var m = new Map<String, T>();
 		for(field in Reflect.fields(obj))
 		{
-			map.set(field, Reflect.field(obj, field));
+			m.set(field, Reflect.field(obj, field));
 		}
+		return m;
+	}
 
-		return map;
+	function run()
+	{
+		var context: Map<String, Dynamic> = map({
+			Country: "Ukraine",
+			Name: "Bohdan Makohin",
+			Exchange: map({
+				rur: ["eur" => 0.025, "usd" => 0.032],
+				uah: ["usd" => 0.123, "eur"=> 0.095]
+			})
+		});
+
+		var files = sys.FileSystem.readDirectory(templatesPath);
+		for(file in files)
+		{
+			trace("[File] " + file);
+			trace(renderFromInput(sys.io.File.read(templatesPath + file), context));
+		}
+	}
+
+	function renderFromInput(input: haxe.io.Input, context): String
+	{
+		var ast = parser.parse(input);
+		return interpreter.run(ast, context);
 	}
 }

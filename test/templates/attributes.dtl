@@ -1,0 +1,5 @@
+<h2>Exchange rates</h2>
+<h3>Ukraine</h3>
+<p>Rate (uah -> eur): {{Exchange.uah.eur}}</p>
+<p>Rate (uah -> usd): {{Exchange.uah.usd}}</p>
+<p>Rate (rur -> eur): {{Exchange.rur.eur}}</p>
