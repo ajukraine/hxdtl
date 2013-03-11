@@ -1,1 +1,1 @@
-My name is {{Name}}, and I live in {{Country}}.
+My name is {{ Name }}, and I live in {{ Country }}.

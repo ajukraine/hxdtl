@@ -12,7 +12,10 @@ class DtlParser extends hxparse.Parser<Token>
 
 	public function parse(input: haxe.io.Input)
 	{
-		stream = new hxparse.LexerStream(new DtlLexer(input), DtlLexer.tok);
+		var lexer = new DtlLexer(input);
+		stream = new hxparse.LexerStream(lexer, DtlLexer.tok);
+		lexer.lexerStream = stream;
+
 		return
 		{
 			body: loop(parseElement, [])
