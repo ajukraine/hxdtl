@@ -1,0 +1,3 @@
+[submodule "lib/hxparse"]
+	path = lib/hxparse
+	url = https://github.com/ajukraine/hxparse.git

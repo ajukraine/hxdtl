@@ -1,6 +1,6 @@
 -cp src
 -cp test
--cp ../hxparse/src
+-cp lib/hxparse/src
 
 -main Test
 -neko bin/neko/hxDtl-test.n
