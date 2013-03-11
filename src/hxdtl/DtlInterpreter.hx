@@ -15,18 +15,27 @@ class DtlInterpreter
 
 		for(expr in ast.body)
 		{
-			switch expr
-			{
-				case Text(t):
-					result.add(t);
-				case Variable(key):
-					result.add(context.get(key));
-				case attr = Attribute(_, _):
-					result.add(evalAttribute(attr, context));
-			}
+			var s = evalExpression(expr, context);
+			if (s != null)
+				result.add(s);
 		}
 
 		return result.toString();
+	}
+
+	function evalExpression<T>(expr, context): T
+	{
+		return switch expr
+		{
+			case NumberLiteral(n): Std.parseInt(n);
+			case StringLiteral(s): s;
+			case Text(text): text;
+			case Variable(key): context.get(key);
+			case attrExpr = Attribute(_, key): evalAttribute(attrExpr, context);
+			case If(eCond, eBody): evalIf(eCond, eBody, context);
+			case BinOp(op, e1, e2): evalBinOp(op, e1, e2, context);
+			case _: null;
+		}
 	}
 
 	function evalAttribute(expr, context)
@@ -39,6 +48,23 @@ class DtlInterpreter
 				cast(evalAttribute(attr, context), StringMap<Dynamic>).get(key);
 			case _:
 				null;
+		}
+	}
+
+	function evalIf(eCond, eBody, context)
+	{
+		if (evalExpression(eCond, context))
+			return evalExpression(eBody, context);
+
+		return null;
+	}
+
+	function evalBinOp(op, e1, e2, context)
+	{
+		return switch op
+		{
+			case Greater: evalExpression(e1, context) > evalExpression(e2, context);
+			case Less: evalExpression(e1, context) < evalExpression(e2, context);
 		}
 	}
 }

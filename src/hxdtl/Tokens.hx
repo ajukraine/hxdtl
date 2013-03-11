@@ -17,8 +17,13 @@ enum TokenDef
 {
 	Text(s: String);
 
+	NumberLiteral(n: String);
+	StringLiteral(s: String);
+
 	Identifier(s: String);
 	Kwd(k: Keyword);
+
+	Op(op: String);
 
 	VarOpen;
 	VarClose;

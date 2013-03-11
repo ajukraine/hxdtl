@@ -38,6 +38,7 @@ class Test
 		var context: Map<String, Dynamic> = map({
 			Country: "Ukraine",
 			Name: "Bohdan Makohin",
+			Year: 2013,
 			Exchange: map({
 				rur: ["eur" => 0.025, "usd" => 0.032],
 				uah: ["usd" => 0.123, "eur"=> 0.095]

@@ -5,10 +5,16 @@ import hxparse.Types;
 
 import hxdtl.Tokens;
 
+
+enum Code
+{
+	Var;
+	Tag;
+}
 enum LexerState
 {
 	InText;
-	InCode;
+	InCode(c: Code);
 }
 
 class DtlLexer extends Lexer implements hxparse.RuleBuilder
@@ -20,11 +26,11 @@ class DtlLexer extends Lexer implements hxparse.RuleBuilder
 		"" => tk(Eof),
 		"[^{]*" => tk(Text(lexer.current)),
 		"{{" => {
-			inCode(lexer);
+			inCodeVar(lexer);
 			tk(VarOpen);
 		},
 		"{%" => {
-			inCode(lexer);
+			inCodeTag(lexer);
 			tk(TagOpen);
 		}
 	];
@@ -45,12 +51,30 @@ class DtlLexer extends Lexer implements hxparse.RuleBuilder
 		"}}" => {
 			inText(lexer);
 			tk(VarClose);
+		}
+	];
+
+	public static var tokInTag = @:rule
+	[
+		"." => tk(Dot),
+		"[\r\n\t ]" => lexer.token(tokInTag),
+		"[0-9]+" => tk(NumberLiteral(lexer.current)),
+		">|<" => tk(Op(lexer.current)),
+		"[_a-zA-Z]*" => {
+			var cur = lexer.current;
+			var kwd = keywords.get(cur);
+
+			if (kwd != null)
+				tk(Kwd(kwd));
+			else
+				tk(Identifier(cur));
 		},
 		"%}" => {
 			inText(lexer);
 			tk(TagClose);
 		}
 	];
+
 
 	public var lexerStream: hxparse.LexerStream<Token> ;
 
@@ -59,14 +83,19 @@ class DtlLexer extends Lexer implements hxparse.RuleBuilder
 		return { tok: token }
 	}
 
-	static function inCode(lexer)
+	static function inCodeVar(lexer)
 	{
-		cast(lexer, DtlLexer).setState(InCode);
+		cast(lexer, DtlLexer).setState(InCode(Var));
 	}
 
 	static function inText(lexer)
 	{
 		cast(lexer, DtlLexer).setState(InText);
+	}
+
+	static function inCodeTag(lexer)
+	{
+		cast(lexer, DtlLexer).setState(InCode(Tag));
 	}
 
 	function setState(state: LexerState)
@@ -75,8 +104,10 @@ class DtlLexer extends Lexer implements hxparse.RuleBuilder
 		{
 			case InText:
 				setRuleset(tok);
-			case InCode:
+			case InCode(Var):
 				setRuleset(tokInVar);
+			case InCode(Tag):
+				setRuleset(tokInTag);
 		}
 	}
 

@@ -1,5 +1,5 @@
 <h3>Brungilda's saga</h3>
 
-{% if Year > 2012 %}
+{% if Year > 2011 %}
 	Yeah!!! I've survided!
 {% endif %}
