@@ -27,8 +27,6 @@ enum TokenDef
 
 	VarOpen;
 	VarClose;
-	TagOpen;
-	TagClose;
 
 	Dot;
 	POpen;

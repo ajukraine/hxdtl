@@ -11,9 +11,13 @@ class DtlInterpreter
 
 	public function run(ast: Ast, context: Map<String, Dynamic>): String
 	{
-		var result = new StringBuf();
+		return evalExpressions(ast.body, context);
+	}
 
-		for(expr in ast.body)
+	function evalExpressions(expressions: Array<AstExpr>, context)
+	{
+		var result = new StringBuf();
+		for(expr in expressions)
 		{
 			var s = evalExpression(expr, context);
 			if (s != null)
@@ -31,7 +35,7 @@ class DtlInterpreter
 			case StringLiteral(s): s;
 			case Text(text): text;
 			case Variable(key): context.get(key);
-			case attrExpr = Attribute(_, key): evalAttribute(attrExpr, context);
+			case attrExpr = Attribute(_, _): evalAttribute(attrExpr, context);
 			case If(eCond, eBody): evalIf(eCond, eBody, context);
 			case BinOp(op, e1, e2): evalBinOp(op, e1, e2, context);
 			case _: null;
@@ -54,7 +58,7 @@ class DtlInterpreter
 	function evalIf(eCond, eBody, context)
 	{
 		if (evalExpression(eCond, context))
-			return evalExpression(eBody, context);
+			return evalExpressions(eBody, context);
 
 		return null;
 	}

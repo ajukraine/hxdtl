@@ -30,8 +30,7 @@ class DtlLexer extends Lexer implements hxparse.RuleBuilder
 			tk(VarOpen);
 		},
 		"{%" => {
-			inCodeTag(lexer);
-			tk(TagOpen);
+			lexer.token(inCodeTag(lexer));
 		}
 	];
 
@@ -48,6 +47,7 @@ class DtlLexer extends Lexer implements hxparse.RuleBuilder
 			else
 				tk(Identifier(cur));
 		},
+		"[0-9]+" => tk(NumberLiteral(lexer.current)),
 		"}}" => {
 			inText(lexer);
 			tk(VarClose);
@@ -70,8 +70,7 @@ class DtlLexer extends Lexer implements hxparse.RuleBuilder
 				tk(Identifier(cur));
 		},
 		"%}" => {
-			inText(lexer);
-			tk(TagClose);
+			lexer.token(inText(lexer));
 		}
 	];
 
@@ -85,17 +84,17 @@ class DtlLexer extends Lexer implements hxparse.RuleBuilder
 
 	static function inCodeVar(lexer)
 	{
-		cast(lexer, DtlLexer).setState(InCode(Var));
+		return cast(lexer, DtlLexer).setState(InCode(Var));
 	}
 
 	static function inText(lexer)
 	{
-		cast(lexer, DtlLexer).setState(InText);
+		return cast(lexer, DtlLexer).setState(InText);
 	}
 
 	static function inCodeTag(lexer)
 	{
-		cast(lexer, DtlLexer).setState(InCode(Tag));
+		return cast(lexer, DtlLexer).setState(InCode(Tag));
 	}
 
 	function setState(state: LexerState)
@@ -109,6 +108,7 @@ class DtlLexer extends Lexer implements hxparse.RuleBuilder
 			case InCode(Tag):
 				setRuleset(tokInTag);
 		}
+		return lexerStream.ruleset;
 	}
 
 	function setRuleset(ruleset: hxparse.Ruleset<Token>)

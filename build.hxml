@@ -3,5 +3,9 @@
 -cp lib/hxparse/src
 
 -main Test
+-dce full
+
 -neko bin/neko/Test.n
 -cmd neko bin/neko/Test.n
+
+#-cpp bin/cpp

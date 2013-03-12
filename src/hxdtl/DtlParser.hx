@@ -18,7 +18,7 @@ class DtlParser extends hxparse.Parser<Token>
 
 		return
 		{
-			body: loop(parseElement, [])
+			body: loop(parseElement)
 		}
 	}
 
@@ -28,11 +28,16 @@ class DtlParser extends hxparse.Parser<Token>
 		return acc;
 	}
 
-	function loop<T>(f:Void->T, acc:Array<T>): Array<T> 
+	function loop<T>(f:Void->T): Array<T>
+	{
+		return loopAndFill(f, []);
+	}
+
+	function loopAndFill<T>(f:Void->T, acc:Array<T>): Array<T> 
 	{
 		return switch stream
 		{
-			case [item = f(), list = loop(f, collect(acc, item))]:
+			case [item = f(), list = loopAndFill(f, collect(acc, item))]:
 				list;
 			case _: acc;
 		}
@@ -44,15 +49,6 @@ class DtlParser extends hxparse.Parser<Token>
 		{
 			case [v = f(fallback)]: v;
 			case _: fallback;
-		}
-	}
-
-	function inTag<T>(f: Void->T): Null<T>
-	{
-		return switch stream
-		{
-			case [{tok: TagOpen}, expr = f(), {tok: TagClose}]:
-				expr;
 		}
 	}
 
@@ -70,8 +66,8 @@ class DtlParser extends hxparse.Parser<Token>
 		return switch stream
 		{
 			case [{tok: Text(t)}]: AstExpr.Text(t);
-			case [ifExpr = parseIfBlock()]: ifExpr;
 			case [value = inVar(parseValue)]: value;
+			case [ifExpr = parseIfBlock()]: ifExpr;
 		}
 	}
 
@@ -79,10 +75,8 @@ class DtlParser extends hxparse.Parser<Token>
 	{
 		return switch stream
 		{
-			case [variable = parseVariable()]:
-				variable;
-			case [literal = parseLiteral()]:
-				literal;
+			case [variable = parseVariable()]: variable;
+			case [literal = parseLiteral()]: literal;
 		}
 	}
 
@@ -118,17 +112,8 @@ class DtlParser extends hxparse.Parser<Token>
 	{
 		return switch stream
 		{
-			case [ifCond = inTag(parseIf), ifBody = parseElement(), tEndIf = inTag(parseEndIf)]:
+			case [{tok: Kwd(If)}, ifCond = parseIfCondition(), ifBody = loop(parseElement), {tok: Kwd(EndIf)}]:
 				AstExpr.If(ifCond, ifBody);
-		}
-	}
-
-	function parseIf()
-	{
-		return switch stream
-		{
-			case [{tok: Kwd(If)}, cond = parseIfCondition()]:
-				cond;
 		}
 	}
 
@@ -138,15 +123,6 @@ class DtlParser extends hxparse.Parser<Token>
 		{
 			case [v1 = parseValue(), op = parseBinOp(), v2 = parseValue()]:
 				AstExpr.BinOp(op, v1, v2);
-		}
-	}
-
-	function parseEndIf()
-	{
-		return switch stream
-		{
-			case [{tok: Kwd(EndIf)}]:
-				AstExpr.If;
 		}
 	}
 

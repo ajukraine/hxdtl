@@ -42,6 +42,10 @@ class Test
 			Exchange: map({
 				rur: ["eur" => 0.025, "usd" => 0.032],
 				uah: ["usd" => 0.123, "eur"=> 0.095]
+			}),
+			Dialog: map({
+				Jack: "Is it a future, bro'?",
+				Raul: "God dammit, no!"
 			})
 		});
 
