@@ -1,0 +1,7 @@
+{% if Year > 2014 %}
+	Number of athletes: {{ Count }}
+{% elif Year > 2013 %}
+	Athletes should be out of the locker room soon!
+{% else %}
+	No athletes.
+{% endif %}

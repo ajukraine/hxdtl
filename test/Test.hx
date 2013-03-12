@@ -36,6 +36,7 @@ class Test
 	function run()
 	{
 		var context: Map<String, Dynamic> = map({
+			Count: 12,
 			Country: "Ukraine",
 			Name: "Bohdan Makohin",
 			Year: 2013,
