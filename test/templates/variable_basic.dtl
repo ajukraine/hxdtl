@@ -1,2 +1,2 @@
 My name is {{ Name }}, and I live in {{ Country }}.
-I;m a software developer with exprience of {{ 3 }} years.
+I'm a software developer with exprience of {{ 3 }} years.
