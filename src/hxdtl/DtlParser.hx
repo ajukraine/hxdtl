@@ -148,8 +148,11 @@ class DtlParser extends hxparse.Parser<Token>
 		return switch stream
 		{
 			case [{tok: Op(">")}]: Greater;
+			case [{tok: Op(">=")}]: GreaterOrEqual;
 			case [{tok: Op("<")}]: Less;
-			case [{tok: Op("==")}]: Equals;
+			case [{tok: Op("<=")}]: LessOrEqual;
+			case [{tok: Op("==")}]: Equal;
+			case [{tok: Op("!=")}]: NotEqual;
 		}
 	}
 }

@@ -31,6 +31,9 @@ enum UnaryOperator
 enum BinaryOperator
 {
 	Greater;
+	GreaterOrEqual;
 	Less;
-	Equals;
+	LessOrEqual;
+	Equal;
+	NotEqual;
 }
