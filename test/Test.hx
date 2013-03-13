@@ -66,11 +66,11 @@ class Test
 					Jack: "Is it a future, bro'?",
 					Raul: "God dammit, no!"
 				})
-			}/*,
-			"tag_if_else" => {
-				Year: 2013,
-				Count: 12
 			},
+			"tag_if_else" => {
+				Year: 2002,
+				Count: 12
+			}/*,
 			"tag_if_elif" => {
 				Year: 2013,
 				Count: 12

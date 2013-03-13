@@ -1,5 +1,17 @@
 {% if Year > 2014 %}
 	Number of athletes: {{ Count }}
 {% else %}
+	{% if Year < 2006 %}
+		DiCaprio: It's an e*ception...
+	{% endif %}
 	No athletes.
+{% endif %}
+
+{% if Count > 0 %}
+Count is greater then 0
+	{% if Count < 10 %}
+Count is less then 10
+	{% else %}
+Count is greater then 10
+	{% endif %}
 {% endif %}

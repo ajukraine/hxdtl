@@ -36,7 +36,8 @@ class DtlInterpreter
 			case Text(text): text;
 			case Variable(key): context.get(key);
 			case attrExpr = Attribute(_, _): evalAttribute(attrExpr, context);
-			case If(eCond, eBody): evalIf(eCond, eBody, context);
+			case If(eCond, eBody): evalIf(eCond, eBody, [], context);
+			case IfElse(eCond, eBodyIf, eBodyElse): evalIf(eCond, eBodyIf, eBodyElse, context);
 			case BinOp(op, e1, e2): evalBinOp(op, e1, e2, context);
 			case _: null;
 		}
@@ -55,12 +56,11 @@ class DtlInterpreter
 		}
 	}
 
-	function evalIf(eCond, eBody, context)
+	function evalIf(eCond, eBodyIf, eBodyElse, context)
 	{
-		if (evalExpression(eCond, context))
-			return evalExpressions(eBody, context);
-
-		return null;
+		return evalExpressions(
+				(evalExpression(eCond, context)) ? eBodyIf : eBodyElse,
+				context);
 	}
 
 	function evalBinOp(op, e1, e2, context)
