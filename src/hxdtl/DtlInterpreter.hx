@@ -67,6 +67,7 @@ class DtlInterpreter
 	{
 		return switch op
 		{
+			case Equals: evalExpression(e1, context) == evalExpression(e2, context);
 			case Greater: evalExpression(e1, context) > evalExpression(e2, context);
 			case Less: evalExpression(e1, context) < evalExpression(e2, context);
 		}

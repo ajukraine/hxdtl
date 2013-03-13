@@ -70,12 +70,11 @@ class Test
 			"tag_if_else" => {
 				Year: 2002,
 				Count: 12
-			}/*,
+			},
 			"tag_if_elif" => {
 				Year: 2013,
 				Count: 12
 			}
-			*/
 		];
 	}
 

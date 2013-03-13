@@ -1,7 +1,19 @@
-{% if Year > 2014 %}
+{% if Year == 2012 %}
 	Number of athletes: {{ Count }}
-{% elif Year > 2013 %}
+{% elif Year > 2015 %}
 	Athletes should be out of the locker room soon!
-{% else %}
+{% elif Year == 2015 %}
+	Equality test!
+{% elif Year == 2013 %}
+	No athletes.
+{% endif %}
+
+{% if Year == 2012 %}
+	Number of athletes: {{ Count }}
+{% elif Year > 2015 %}
+	Athletes should be out of the locker room soon!
+{% elif Year == 2013 %}
+	Equality test!
+{% elif Year == 2013 %}
 	No athletes.
 {% endif %}

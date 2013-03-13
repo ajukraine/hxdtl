@@ -32,4 +32,5 @@ enum BinaryOperator
 {
 	Greater;
 	Less;
+	Equals;
 }

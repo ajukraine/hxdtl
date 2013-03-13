@@ -112,13 +112,24 @@ class DtlParser extends hxparse.Parser<Token>
 	{
 		return switch stream
 		{
-			case [{tok: Kwd(If)}, ifCond = parseIfCondition(), ifBody = loop(parseElement)]:
+			case [{tok: Kwd(If)}]:
+				parseIfCondAndBody();
+		}
+	}
+
+	function parseIfCondAndBody()
+	{
+		return switch stream
+		{
+			case [ifCond = parseIfCondition(), ifBody = loop(parseElement)]:
 				switch stream
 				{
 					case [{tok: Kwd(EndIf)}]:
 						AstExpr.If(ifCond, ifBody);
 					case [{tok: Kwd(Else)}, elseBody = loop(parseElement), {tok: Kwd(EndIf)}]:
 						AstExpr.IfElse(ifCond, ifBody, elseBody);
+					case [{tok: Kwd(Elif)}]:
+						AstExpr.IfElse(ifCond, ifBody, [parseIfCondAndBody()]);
 				}
 		}
 	}
@@ -138,6 +149,7 @@ class DtlParser extends hxparse.Parser<Token>
 		{
 			case [{tok: Op(">")}]: Greater;
 			case [{tok: Op("<")}]: Less;
+			case [{tok: Op("==")}]: Equals;
 		}
 	}
 }
