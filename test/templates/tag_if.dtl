@@ -1,5 +1,12 @@
 <h3>Brungilda's saga</h3>
 
-{% if Year > 2011 %}Raul: Yeah!!! I've survided!
-{% if Year > 2013 %}Jack: Is it a future, bro'?{% endif %}{% endif %}
+{% if Year > 2011 %}Jack: Yeah!!! I've survided!
+	{% if Year > 2012 %}
+Jack: Is it a future, bro'?
+		{% if Year < 2006 %}
+DiCaprio: It's an e*ception...
+		{% endif %}
+	{% endif %}
+{% endif %}
+
 {% if Year < 2015 %}Raul: {{ Dialog.Raul }}{% endif %}
