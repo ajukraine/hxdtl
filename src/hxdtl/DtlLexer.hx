@@ -59,7 +59,7 @@ class DtlLexer extends Lexer implements hxparse.RuleBuilder
 		"." => tk(Dot),
 		"[\r\n\t ]" => lexer.token(tokInTag),
 		"[0-9]+" => tk(NumberLiteral(lexer.current)),
-		">=|<=|==|>|<|!=|and|or|not" => tk(Op(lexer.current)),
+		">=|<=|==|>|<|!=" => tk(Op(lexer.current)),
 		"[_a-zA-Z]*" => {
 			var cur = lexer.current;
 			var kwd = keywords.get(cur);

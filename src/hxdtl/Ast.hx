@@ -14,11 +14,12 @@ enum AstExpr
 
 	Variable(i: String);
 
-	Attribute(v: AstExpr, i: String);
+	Attribute(i: String, v: AstExpr);
 
 	If(cond: AstExpr, body: Array<AstExpr>);
 	IfElse(cond: AstExpr, ifBody: Array<AstExpr>, elseBody: Array<AstExpr>);
 
+	NullOp(e: AstExpr);
 	UnOp(op: UnaryOperator, e: AstExpr);
 	BinOp(op: BinaryOperator, e1: AstExpr, e2: AstExpr);
 }
@@ -36,4 +37,6 @@ enum BinaryOperator
 	LessOrEqual;
 	Equal;
 	NotEqual;
+	And;
+	Or;
 }

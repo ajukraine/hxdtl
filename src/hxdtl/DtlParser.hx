@@ -43,15 +43,6 @@ class DtlParser extends hxparse.Parser<Token>
 		}
 	}
 
-	function opt<T>(f:T->T, fallback: T = null): Null<T>
-	{
-		return switch stream
-		{
-			case [v = f(fallback)]: v;
-			case _: fallback;
-		}
-	}
-
 	function inVar<T>(f: Void->T): Null<T>
 	{
 		return switch stream
@@ -93,18 +84,12 @@ class DtlParser extends hxparse.Parser<Token>
 	{
 		return switch stream
 		{
-			case [{tok: Identifier(identifier)}, expr = opt(parseAttribute, AstExpr.Variable(identifier))]:
-				expr;
-		}
-	}
-
-	function parseAttribute(outExpr)
-	{
-		return switch stream
-		{
-			case [{tok: Dot}, {tok: Identifier(identifier)},
-				expr = opt(parseAttribute, AstExpr.Attribute(outExpr, identifier))]:
-				expr;
+			case [{tok: Identifier(identifier)}]:
+				switch stream
+				{
+					case [{tok: Dot}, v = parseVariable()]: AstExpr.Attribute(identifier, v);
+					case _: AstExpr.Variable(identifier);
+				}
 		}
 	}
 
@@ -112,12 +97,11 @@ class DtlParser extends hxparse.Parser<Token>
 	{
 		return switch stream
 		{
-			case [{tok: Kwd(If)}]:
-				parseIfCondAndBody();
+			case [{tok: Kwd(If)}]: parseIfBlockBody();
 		}
 	}
 
-	function parseIfCondAndBody()
+	function parseIfBlockBody()
 	{
 		return switch stream
 		{
@@ -129,7 +113,7 @@ class DtlParser extends hxparse.Parser<Token>
 					case [{tok: Kwd(Else)}, elseBody = loop(parseElement), {tok: Kwd(EndIf)}]:
 						AstExpr.IfElse(ifCond, ifBody, elseBody);
 					case [{tok: Kwd(Elif)}]:
-						AstExpr.IfElse(ifCond, ifBody, [parseIfCondAndBody()]);
+						AstExpr.IfElse(ifCond, ifBody, [parseIfBlockBody()]);
 				}
 		}
 	}
@@ -138,12 +122,48 @@ class DtlParser extends hxparse.Parser<Token>
 	{
 		return switch stream
 		{
-			case [v1 = parseValue(), op = parseBinOp(), v2 = parseValue()]:
-				AstExpr.BinOp(op, v1, v2);
+			case [part = parseIfConditionPart()]:
+				switch stream
+				{
+					case [op1 = parseBinOp1()]: AstExpr.BinOp(op1, part, parseIfCondition());
+					case _: part;
+				}
+		};
+	}
+
+	function parseIfConditionPart() 
+	{
+		return switch stream
+		{
+			case [v1 = parseValue()]:
+				switch stream
+				{
+					case [op2 = parseBinOp2(), v2 = parseValue()]: AstExpr.BinOp(op2, v1, v2);
+					case _: AstExpr.NullOp(v1);
+				}
+
+			case [op = parseUnOp(), v = parseValue()]: AstExpr.UnOp(op, v);
 		}
 	}
 
-	function parseBinOp()
+	function parseUnOp() 
+	{
+		return switch stream
+		{
+			case [{tok: Kwd(Not)}]: Not;
+		}
+	}
+
+	function parseBinOp1()
+	{
+		return switch stream
+		{
+			case [{tok: Kwd(And)}]: And;
+			case [{tok: Kwd(Or)}]: Or;
+		};
+	}
+
+	function parseBinOp2()
 	{
 		return switch stream
 		{

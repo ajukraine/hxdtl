@@ -25,9 +25,9 @@ class Test
 
 		var test = new Test("test/templates/", [
 			test_varaible,
-			test_if
+			test_if,
 		]);
-
+		
 		test.run();
 	}
 
@@ -50,6 +50,7 @@ class Test
 			},
 			"variable_attributes" => {
 				Exchange: map({
+					date: "17 March",
 					rur: ["eur" => 0.025, "usd" => 0.032],
 					uah: ["usd" => 0.123, "eur"=> 0.095]
 				})
@@ -76,7 +77,9 @@ class Test
 				Count: 12
 			},
 			"tag_if_boolean" => {
-				Count: 20
+				Count: 20,
+				Max: 25,
+				Zero: 0
 			}
 		];
 	}

@@ -1,10 +1,22 @@
 Count = {{ Count }}
 
+{% if Zero %}
+The: 0
+{% elif not Max %}
+The: 20
+{% else %}
+The: ?
+{% endif %}
+
 {% if Count != 10 %}
 Count != 10
-	{% if Count > 10 %}
+	{% if Count > 10 and Zero %}
 	Count > 10
 	{% elif Count < 10 %}
 	Count < 10
 	{% endif %}
+{% endif %}
+
+{% if Zero or not Max %}
+	Success
 {% endif %}

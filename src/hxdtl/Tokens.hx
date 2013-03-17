@@ -11,6 +11,10 @@ enum Keyword
 	For;
 	In;
 	EndFor;
+
+	And;
+	Or;
+	Not;
 }
 
 enum TokenDef
