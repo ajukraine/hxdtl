@@ -1,29 +1,27 @@
 import haxe.io.StringInput;
-import hxdtl.parser.Parser;
-import hxdtl.runtime.Interpreter;
+import hxdtl.Environment;
 
 class Test
 {
-	var templatesPath: String;
-	var interpreter: Interpreter;
-	var parser: Parser;
+	var environment: Environment;
 	var tests: Array<Void -> Map<String, Dynamic>>;
 
 	public function new(
 		templatesPath: String,
 		tests: Array<Void -> Map<String, Dynamic>>)
 	{
-		this.interpreter = new Interpreter();
-		this.parser = new Parser();
-		this.templatesPath = templatesPath;
 		this.tests = tests;
+
+		environment = new Environment({
+			path: templatesPath
+		});
 	}
 
 	static function main()
 	{
 		trace("hxDtl - Haxe implmentation of Django Template Language");
 
-		var test = new Test("test/templates/", [
+		var test = new Test("test/templates", [
 			test_varaible,
 			test_if,
 		]);
@@ -100,12 +98,8 @@ class Test
 	function runTest(name: String, context)
 	{
 		trace('[Test] ${name}');
-		trace(renderFromInput(sys.io.File.read('${templatesPath}${name}.dtl'), map(context)));
-	}
 
-	function renderFromInput(input: haxe.io.Input, context): String
-	{
-		var ast = parser.parse(input);
-		return interpreter.run(ast, context);
+		var tpl = environment.getTemplate('${name}.dtl');
+		trace(tpl.render(context));
 	}
 }
