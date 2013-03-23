@@ -1,20 +1,20 @@
 import haxe.io.StringInput;
-import hxdtl.DtlParser;
-import hxdtl.DtlInterpreter;
+import hxdtl.parser.Parser;
+import hxdtl.runtime.Interpreter;
 
 class Test
 {
 	var templatesPath: String;
-	var interpreter: DtlInterpreter;
-	var parser: DtlParser;
+	var interpreter: Interpreter;
+	var parser: Parser;
 	var tests: Array<Void -> Map<String, Dynamic>>;
 
 	public function new(
 		templatesPath: String,
 		tests: Array<Void -> Map<String, Dynamic>>)
 	{
-		this.interpreter = new DtlInterpreter();
-		this.parser = new DtlParser();
+		this.interpreter = new Interpreter();
+		this.parser = new Parser();
 		this.templatesPath = templatesPath;
 		this.tests = tests;
 	}

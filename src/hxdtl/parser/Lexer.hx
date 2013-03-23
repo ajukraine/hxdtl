@@ -1,9 +1,7 @@
-package hxdtl;
+package hxdtl.parser;
 
-import hxparse.Lexer;
 import hxparse.Types;
-
-import hxdtl.Tokens;
+import hxdtl.parser.Tokens;
 
 
 enum Code
@@ -11,13 +9,14 @@ enum Code
 	Var;
 	Tag;
 }
+
 enum LexerState
 {
 	InText;
 	InCode(c: Code);
 }
 
-class DtlLexer extends Lexer implements hxparse.RuleBuilder
+class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 {
 	static var keywords = @:mapping Keyword;
 
@@ -84,17 +83,17 @@ class DtlLexer extends Lexer implements hxparse.RuleBuilder
 
 	static function inCodeVar(lexer)
 	{
-		return cast(lexer, DtlLexer).setState(InCode(Var));
+		return cast(lexer, Lexer).setState(InCode(Var));
 	}
 
 	static function inText(lexer)
 	{
-		return cast(lexer, DtlLexer).setState(InText);
+		return cast(lexer, Lexer).setState(InText);
 	}
 
 	static function inCodeTag(lexer)
 	{
-		return cast(lexer, DtlLexer).setState(InCode(Tag));
+		return cast(lexer, Lexer).setState(InCode(Tag));
 	}
 
 	function setState(state: LexerState)

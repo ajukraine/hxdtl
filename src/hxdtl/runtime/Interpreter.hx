@@ -1,9 +1,9 @@
-package hxdtl;
+package hxdtl.runtime;
 
 import haxe.ds.StringMap;
-import hxdtl.Ast;
+import hxdtl.parser.Ast;
 
-class DtlInterpreter
+class Interpreter
 {
 	public function new()
 	{

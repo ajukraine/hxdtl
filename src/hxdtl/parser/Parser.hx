@@ -1,9 +1,9 @@
-package hxdtl;
+package hxdtl.parser;
 
-import hxdtl.Tokens;
-import hxdtl.Ast;
+import hxdtl.parser.Tokens;
+import hxdtl.parser.Ast;
 
-class DtlParser extends hxparse.Parser<Token> 
+class Parser extends hxparse.Parser<Token> 
 {
 	public function new()
 	{
@@ -12,8 +12,8 @@ class DtlParser extends hxparse.Parser<Token>
 
 	public function parse(input: haxe.io.Input)
 	{
-		var lexer = new DtlLexer(input);
-		stream = new hxparse.LexerStream(lexer, DtlLexer.tok);
+		var lexer = new Lexer(input);
+		stream = new hxparse.LexerStream(lexer, Lexer.tok);
 		lexer.lexerStream = stream;
 
 		return

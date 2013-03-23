@@ -1,4 +1,4 @@
-package hxdtl;
+package hxdtl.parser;
 
 typedef Ast =
 {
