@@ -79,7 +79,7 @@ class Interpreter
 		var result = new StringBuf();
 
 		var forContext = context.clone();
-		var list = cast(context.get(idList), Array<Dynamic>);
+		var list: Array<Dynamic> = context.get(idList);
 
 		for(item in list)
 		{
