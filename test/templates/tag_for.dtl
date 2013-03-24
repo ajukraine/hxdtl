@@ -1,0 +1,5 @@
+<ul>
+{% for dev in Developers %}{% if dev.salary < 1900 %}
+	<li>{{ dev.name }} [{{dev.status}}]</li>
+{% endif %}{% endfor %}
+</ul>

@@ -24,19 +24,10 @@ class Test
 		var test = new Test("test/templates", [
 			test_varaible,
 			test_if,
+			test_for
 		]);
 		
 		test.run();
-	}
-
-	static function map<T>(obj: T)
-	{
-		var m = new Map<String, T>();
-		for(field in Reflect.fields(obj))
-		{
-			m.set(field, Reflect.field(obj, field));
-		}
-		return m;
 	}
 
 	static function test_varaible(): Map<String, Dynamic>
@@ -47,11 +38,11 @@ class Test
 				Country: "Ukraine"
 			},
 			"variable_attributes" => {
-				Exchange: map({
+				Exchange: {
 					date: "17 March",
 					rur: ["eur" => 0.025, "usd" => 0.032],
 					uah: ["usd" => 0.123, "eur"=> 0.095]
-				})
+				}
 			}
 		];
 	}
@@ -61,10 +52,10 @@ class Test
 		return [
 			"tag_if" => {
 				Year: 2013,
-				Dialog: map({
+				Dialog: {
 					Jack: "Is it a future, bro'?",
 					Raul: "God dammit, no!"
-				})
+				}
 			},
 			"tag_if_else" => {
 				Year: 2002,
@@ -78,6 +69,19 @@ class Test
 				Count: 20,
 				Max: 25,
 				Zero: 0
+			}
+		];
+	}
+
+	static function test_for(): Map<String, Dynamic>
+	{
+		return [
+			"tag_for" => {
+				Developers: [
+					{name: "Sebastian Fettel", status: "Senior", salary: 2000},
+					{name: "Mark Webber", status: "Intermediate", salary: 1800},
+					{name: "Niko Rosberg", status: "Intermediate", salary: 1500}
+				]
 			}
 		];
 	}

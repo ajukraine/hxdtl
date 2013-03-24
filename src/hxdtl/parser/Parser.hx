@@ -59,6 +59,7 @@ class Parser extends hxparse.Parser<Token>
 			case [{tok: Text(t)}]: AstExpr.Text(t);
 			case [value = inVar(parseValue)]: value;
 			case [ifExpr = parseIfBlock()]: ifExpr;
+			case [forExpr = parseForBlock()]: forExpr;
 		}
 	}
 
@@ -146,7 +147,18 @@ class Parser extends hxparse.Parser<Token>
 		}
 	}
 
-	function parseUnOp() 
+	function parseForBlock()
+	{
+		return switch stream
+		{
+			case [{tok: Kwd(For)}, {tok: Identifier(id)}, {tok: Kwd(In)}, {tok: Identifier(idList)},
+				body = loop(parseElement),
+				{tok: Kwd(EndFor)}
+			]: AstExpr.For(id, idList, body);
+		}
+	}
+
+	function parseUnOp()
 	{
 		return switch stream
 		{

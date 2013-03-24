@@ -2,6 +2,7 @@ package hxdtl.runtime;
 
 import haxe.ds.StringMap;
 import hxdtl.parser.Ast;
+import hxdtl.runtime.Context;
 
 class Interpreter
 {
@@ -9,12 +10,12 @@ class Interpreter
 	{
 	}
 
-	public function run(ast: Ast, context: Map<String, Dynamic>): String
+	public function run(ast: Ast, context: Context): String
 	{
 		return evalExpressions(ast.body, context);
 	}
 
-	function evalExpressions(expressions: Array<AstExpr>, context)
+	function evalExpressions(expressions: Array<AstExpr>, context: Context)
 	{
 		var result = new StringBuf();
 		for(expr in expressions)
@@ -39,6 +40,8 @@ class Interpreter
 			
 			case If(eCond, eBody): evalIf(eCond, eBody, [], context);
 			case IfElse(eCond, eBodyIf, eBodyElse): evalIf(eCond, eBodyIf, eBodyElse, context);
+
+			case For(id, idList, body): evalFor(id, idList, body, context);
 			
 			case NullOp(e1): evalNullOp(e1, context);
 			case UnOp(op, e1): evalUnOp(op, e1, context);
@@ -46,19 +49,19 @@ class Interpreter
 		}
 	}
 
-	function evalVariable(key, context: Dynamic)
+	function evalVariable(key, context: Context)
 	{
-		return cast(context, StringMap<Dynamic>).get(key);
+		return context.get(key);
 	}
 
-	function evalAttribute(expr, context)
+	function evalAttribute(expr, context: Context)
 	{
 		return switch expr
 		{
 			case Attribute(key2, Variable(key1)):
-				evalVariable(key1, context.get(key2));
+				evalVariable(key1, context.subContext(key2));
 			case Attribute(key, attr = Attribute(_, _)):
-				evalAttribute(attr, evalVariable(key, context));
+				evalAttribute(attr, context.subContext(key));
 			case _:
 				null;
 		}
@@ -69,6 +72,22 @@ class Interpreter
 		return evalExpressions(
 				(evalExpression(eCond, context)) ? eBodyIf : eBodyElse,
 				context);
+	}
+
+	function evalFor(id, idList, body, context: Context)
+	{
+		var result = new StringBuf();
+
+		var forContext = context.clone();
+		var list = cast(context.get(idList), Array<Dynamic>);
+
+		for(item in list)
+		{
+			forContext.set(id, item);
+			result.add(evalExpressions(body, forContext));
+		}
+
+		return result.toString();
 	}
 
 	function evalNullOp(e1, context)

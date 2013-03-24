@@ -12,12 +12,14 @@ enum AstExpr
 	StringLiteral(s: String);
 	NumberLiteral(n: String);
 
-	Variable(i: String);
+	Variable(id: String);
 
-	Attribute(i: String, v: AstExpr);
+	Attribute(id: String, v: AstExpr);
 
 	If(cond: AstExpr, body: Array<AstExpr>);
 	IfElse(cond: AstExpr, ifBody: Array<AstExpr>, elseBody: Array<AstExpr>);
+
+	For(id: String, idList: String, body: Array<AstExpr>);
 
 	NullOp(e: AstExpr);
 	UnOp(op: UnaryOperator, e: AstExpr);
