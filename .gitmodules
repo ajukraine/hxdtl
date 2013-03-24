@@ -1,3 +1,6 @@
 [submodule "lib/hxparse"]
 	path = lib/hxparse
 	url = https://github.com/ajukraine/hxparse.git
+[submodule "doc/wiki"]
+	path = doc/wiki
+	url = https://github.com/ajukraine/hxdtl.wiki.git
