@@ -3,7 +3,7 @@
 HxDTL is a Haxe implementation of Django Template Language.
 
 ## Status
-This is very early stage of development for now.
+There is now official release yet. However you can explore [Roadmap](doc/wiki/Roadmap.md) to see the upcoming release details.
 
 ## Installation
 
