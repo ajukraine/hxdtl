@@ -3,7 +3,7 @@
 HxDTL is a Haxe implementation of Django Template Language.
 
 ## Status
-There is now official release yet. However you can explore [Roadmap](doc/wiki/Roadmap.md) to see the upcoming release details.
+There is now official release yet. However you can explore [Roadmap][Roadmap] to see the upcoming release details.
 
 ## Installation
 
@@ -11,3 +11,5 @@ There is now official release yet. However you can explore [Roadmap](doc/wiki/Ro
 $ git clone https://github.com/ajukraine/hxdtl.git
 $ git submodule update --init
 ```
+
+[Roadmap]: https://github.com/ajukraine/hxdtl/wiki/Roadmap
