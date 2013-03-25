@@ -20,6 +20,7 @@ enum AstExpr
 	IfElse(cond: AstExpr, ifBody: Array<AstExpr>, elseBody: Array<AstExpr>);
 
 	For(id: String, idList: String, body: Array<AstExpr>);
+	ForEmpty(id: String, idList: String, body: Array<AstExpr>, emptyBody: Array<AstExpr>);
 
 	NullOp(e: AstExpr);
 	UnOp(op: UnaryOperator, e: AstExpr);

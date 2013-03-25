@@ -1,5 +1,16 @@
+<h3>Developers with salary under 1900</h3>
+
 <ul>
 {% for dev in Developers %}{% if dev.salary < 1900 %}
 	<li>{{ dev.name }} [{{dev.status}}]</li>
 {% endif %}{% endfor %}
+</ul>
+
+<h3>Designers</h3>
+<ul>
+{% for des in Designers %}
+	<li>{{ des.name }} [{{des.experience}} years]</li>
+{% empty %}
+There are no designers
+{% endfor %}
 </ul>

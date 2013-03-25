@@ -10,6 +10,7 @@ enum Keyword
 
 	For;
 	In;
+	Empty;
 	EndFor;
 
 	And;

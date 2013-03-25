@@ -22,8 +22,8 @@ class Test
 		trace("hxDtl - Haxe implmentation of Django Template Language");
 
 		var test = new Test("test/templates", [
-			test_varaible,
-			test_if,
+			// test_varaible,
+			// test_if,
 			test_for
 		]);
 		

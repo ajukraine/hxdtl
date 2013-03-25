@@ -152,9 +152,15 @@ class Parser extends hxparse.Parser<Token>
 		return switch stream
 		{
 			case [{tok: Kwd(For)}, {tok: Identifier(id)}, {tok: Kwd(In)}, {tok: Identifier(idList)},
-				body = loop(parseElement),
-				{tok: Kwd(EndFor)}
-			]: AstExpr.For(id, idList, body);
+				body = loop(parseElement)]:
+
+				switch stream
+				{
+					case [{tok: Kwd(EndFor)}]:
+						AstExpr.For(id, idList, body);
+					case [{tok: Kwd(Empty)}, emptyBody = loop(parseElement), {tok: Kwd(EndFor)}]:
+						AstExpr.ForEmpty(id, idList, body, emptyBody);
+				}
 		}
 	}
 

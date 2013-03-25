@@ -42,6 +42,8 @@ class Interpreter
 			case IfElse(eCond, eBodyIf, eBodyElse): evalIf(eCond, eBodyIf, eBodyElse, context);
 
 			case For(id, idList, body): evalFor(id, idList, body, context);
+				
+			case ForEmpty(id, idList, body, emptyBody): evalForEmpty(id, idList, body, emptyBody, context);
 			
 			case NullOp(e1): evalNullOp(e1, context);
 			case UnOp(op, e1): evalUnOp(op, e1, context);
@@ -85,6 +87,30 @@ class Interpreter
 		{
 			forContext.set(id, item);
 			result.add(evalExpressions(body, forContext));
+		}
+
+		return result.toString();
+	}
+
+	function evalForEmpty(id, idList, body, emptyBody, context: Context)
+	{
+		var result = new StringBuf();
+
+		
+		var list: Array<Dynamic> = context.get(idList);
+
+		if (list == null || list.length == 0)
+		{
+			result.add(evalExpressions(emptyBody, context));
+		}
+		else
+		{
+			var forContext = context.clone();
+			for(item in list)
+			{
+				forContext.set(id, item);
+				result.add(evalExpressions(body, forContext));
+			}
 		}
 
 		return result.toString();
