@@ -25,6 +25,8 @@ enum AstExpr
 	NullOp(e: AstExpr);
 	UnOp(op: UnaryOperator, e: AstExpr);
 	BinOp(op: BinaryOperator, e1: AstExpr, e2: AstExpr);
+
+	Comment(s: String);
 }
 
 enum UnaryOperator

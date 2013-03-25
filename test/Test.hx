@@ -22,9 +22,10 @@ class Test
 		trace("hxDtl - Haxe implmentation of Django Template Language");
 
 		var test = new Test("test/templates", [
-			// test_varaible,
-			// test_if,
-			test_for
+			test_varaible,
+			test_if,
+			test_for,
+			test_comment
 		]);
 		
 		test.run();
@@ -83,6 +84,14 @@ class Test
 					{name: "Niko Rosberg", status: "Intermediate", salary: 1500}
 				]
 			}
+		];
+	}
+
+	static function test_comment(): Map<String, Dynamic>
+	{
+		return [
+			"tag_comment" => {},
+			"comment" => {}
 		];
 	}
 

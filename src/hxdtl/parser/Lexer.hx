@@ -8,6 +8,7 @@ enum Code
 {
 	Var;
 	Tag;
+	CommentTag;
 }
 
 enum LexerState
@@ -20,6 +21,11 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 {
 	static var keywords = @:mapping Keyword;
 
+	static var buf = new StringBuf();
+
+	static var comment = "comment";
+	static var endcomment = "endcomment";
+
 	public static var tok = @:rule
 	[
 		"" => tk(Eof),
@@ -30,6 +36,10 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 		},
 		"{%" => {
 			lexer.token(inCodeTag(lexer));
+		},
+		"{#" => {
+			buf = new StringBuf();
+			lexer.token(tokComment);
 		}
 	];
 
@@ -59,6 +69,10 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 		"[\r\n\t ]" => lexer.token(tokInTag),
 		"[0-9]+" => tk(NumberLiteral(lexer.current)),
 		">=|<=|==|>|<|!=" => tk(Op(lexer.current)),
+		comment => {
+			inCommentTag(lexer);
+			tk(Kwd(Comment));
+		},
 		"[_a-zA-Z]*" => {
 			var cur = lexer.current;
 			var kwd = keywords.get(cur);
@@ -73,6 +87,26 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 		}
 	];
 
+	public static var tokInCommentTag = @:rule
+	[
+		"[^{]*" => {
+			tk(Text(lexer.current));
+		},
+		"{%[ ]*" + endcomment + "[ ]*%}" => {
+			inText(lexer);
+			tk(Kwd(EndComment));
+		}
+	];
+
+	public static var tokComment = @:rule
+	[
+		"#}" => tk(Comment(buf.toString())),
+		"[^#]|[^}]" => {
+			buf.add(lexer.current);
+			lexer.token(tokComment);
+		}
+	];
+
 
 	public var lexerStream: hxparse.LexerStream<Token> ;
 
@@ -81,19 +115,24 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 		return { tok: token }
 	}
 
-	static function inCodeVar(lexer)
-	{
-		return cast(lexer, Lexer).setState(InCode(Var));
-	}
-
 	static function inText(lexer)
 	{
 		return cast(lexer, Lexer).setState(InText);
 	}
 
+	static function inCodeVar(lexer)
+	{
+		return cast(lexer, Lexer).setState(InCode(Var));
+	}
+
 	static function inCodeTag(lexer)
 	{
 		return cast(lexer, Lexer).setState(InCode(Tag));
+	}
+
+	static function inCommentTag(lexer) 
+	{
+		return cast(lexer, Lexer).setState(InCode(CommentTag));
 	}
 
 	function setState(state: LexerState)
@@ -106,6 +145,8 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 				setRuleset(tokInVar);
 			case InCode(Tag):
 				setRuleset(tokInTag);
+			case InCode(CommentTag):
+				setRuleset(tokInCommentTag);
 		}
 		return lexerStream.ruleset;
 	}

@@ -16,6 +16,9 @@ enum Keyword
 	And;
 	Or;
 	Not;
+
+	Comment;
+	EndComment;
 }
 
 enum TokenDef
@@ -36,6 +39,8 @@ enum TokenDef
 	Dot;
 	POpen;
 	PClose;
+
+	Comment(s: String);
 
 	Eof;
 }

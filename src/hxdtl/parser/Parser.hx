@@ -60,6 +60,7 @@ class Parser extends hxparse.Parser<Token>
 			case [value = inVar(parseValue)]: value;
 			case [ifExpr = parseIfBlock()]: ifExpr;
 			case [forExpr = parseForBlock()]: forExpr;
+			case [comment = parseComment()]: comment;
 		}
 	}
 
@@ -132,7 +133,7 @@ class Parser extends hxparse.Parser<Token>
 		};
 	}
 
-	function parseIfConditionPart() 
+	function parseIfConditionPart()
 	{
 		return switch stream
 		{
@@ -161,6 +162,17 @@ class Parser extends hxparse.Parser<Token>
 					case [{tok: Kwd(Empty)}, emptyBody = loop(parseElement), {tok: Kwd(EndFor)}]:
 						AstExpr.ForEmpty(id, idList, body, emptyBody);
 				}
+		}
+	}
+
+	function parseComment()
+	{
+		return switch stream
+		{
+			case [{tok: Comment(text)}]:
+				Comment(text);
+			case [{tok: Kwd(Comment)}, {tok: Text(text)}, {tok: Kwd(EndComment)}]:
+				Comment(text);
 		}
 	}
 

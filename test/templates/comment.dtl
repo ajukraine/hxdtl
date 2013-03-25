@@ -1,0 +1,3 @@
+Text before inline comment.
+{# {% if foo %}bar{% else %} #}
+Text after inline comment.

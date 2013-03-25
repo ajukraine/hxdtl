@@ -48,6 +48,8 @@ class Interpreter
 			case NullOp(e1): evalNullOp(e1, context);
 			case UnOp(op, e1): evalUnOp(op, e1, context);
 			case BinOp(op, e1, e2): evalBinOp(op, e1, e2, context);
+
+			case Comment(_): null;
 		}
 	}
 

@@ -1,0 +1,5 @@
+It's an ordinar text.
+{% comment %}
+	And this is commented out text
+{% endcomment %}
+Text after comment
