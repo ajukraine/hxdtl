@@ -2,12 +2,15 @@ package hxdtl.runtime;
 
 import haxe.ds.StringMap;
 import hxdtl.parser.Ast;
-import hxdtl.runtime.Context;
+import hxdtl.runtime.*;
 
 class Interpreter
 {
+	var filters: Filters;
+
 	public function new()
 	{
+		filters = new Filters();
 	}
 
 	public function run(ast: Ast, context: Context): String
@@ -37,7 +40,9 @@ class Interpreter
 			case Text(text): text;
 			case Variable(identifier): evalVariable(identifier, context);
 			case attrExpr = Attribute(_, _): evalAttribute(attrExpr, context);
-			
+
+			case Filter(value, filter, arg): evalFilter(value, filter, arg, context);
+
 			case If(eCond, eBody): evalIf(eCond, eBody, [], context);
 			case IfElse(eCond, eBodyIf, eBodyElse): evalIf(eCond, eBodyIf, eBodyElse, context);
 
@@ -71,6 +76,22 @@ class Interpreter
 		}
 	}
 
+	function evalFilter(value, filterName, arg, context: Context) 
+	{
+		var _filter = filters.getFilter(filterName);
+		var _value = evalExpression(value, context);
+		
+		if (arg != null)
+		{
+			var _arg = evalExpression(arg, context);
+			return _filter(_value, _arg);
+		}
+		else
+		{
+			return _filter(_value);
+		}
+	}
+
 	function evalIf(eCond, eBodyIf, eBodyElse, context)
 	{
 		return evalExpressions(
@@ -83,9 +104,9 @@ class Interpreter
 		var result = new StringBuf();
 
 		var forContext = context.clone();
-		var list: Array<Dynamic> = context.get(idList);
+		var array: Array<Dynamic> = context.get(idList);
 
-		for(item in list)
+		for(item in array)
 		{
 			forContext.set(id, item);
 			result.add(evalExpressions(body, forContext));

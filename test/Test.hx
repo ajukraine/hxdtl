@@ -33,7 +33,8 @@ class Test
 			test_varaible,
 			test_if,
 			test_for,
-			test_comment
+			test_comment,
+			test_filter
 		]);
 		
 		test.run();
@@ -116,6 +117,15 @@ class Test
 		return [
 			"tag_comment" => {},
 			"comment" => {}
+		];
+	}
+
+	static function test_filter(): Map<String, Dynamic>
+	{
+		return [
+			"filter_basic" => {
+				supported_filters: ["add", "length", "default"]
+			}
 		];
 	}
 

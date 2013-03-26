@@ -1,0 +1,7 @@
+Length filter: {{ supported_filters|length }}
+Length filter in string: {{"The string"|length}}
+Add filter: {{ 2|add:"all2one" }}
+Add filter on numbers: {{ 10|add:7}}
+Add filter on array: {{supported_filters|add:supported_filters}}
+Default filter: {{iDontExist|default:"Nothing, babe"}}
+Default filter on string: {{ "I exist!"|default:"Ha-ha"}}

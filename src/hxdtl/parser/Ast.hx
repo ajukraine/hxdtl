@@ -12,8 +12,9 @@ enum AstExpr
 	StringLiteral(s: String);
 	NumberLiteral(n: String);
 
-	Variable(id: String);
+	Filter(value: AstExpr, name: String, arg: AstExpr);
 
+	Variable(id: String);
 	Attribute(id: String, v: AstExpr);
 
 	If(cond: AstExpr, body: Array<AstExpr>);

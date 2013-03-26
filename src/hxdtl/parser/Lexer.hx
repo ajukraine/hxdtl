@@ -46,6 +46,12 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 	public static var tokInVar = @:rule
 	[
 		"." => tk(Dot),
+		":" => tk(DoubleDot),
+		"|" => tk(Pipe),
+		'"' => {
+			buf = new StringBuf();
+			lexer.token(tokString);
+		},
 		"[\r\n\t ]" => lexer.token(tokInVar),
 		"[_a-zA-Z]*" => {
 			var cur = lexer.current;
@@ -66,6 +72,8 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 	public static var tokInTag = @:rule
 	[
 		"." => tk(Dot),
+		":" => tk(DoubleDot),
+		"|" => tk(Pipe),
 		"[\r\n\t ]" => lexer.token(tokInTag),
 		"[0-9]+" => tk(NumberLiteral(lexer.current)),
 		">=|<=|==|>|<|!=" => tk(Op(lexer.current)),
@@ -100,11 +108,20 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 
 	public static var tokComment = @:rule
 	[
-		"#}" => tk(Comment(buf.toString())),
 		"[^#]|[^}]" => {
 			buf.add(lexer.current);
 			lexer.token(tokComment);
-		}
+		},
+		"#}" => tk(Comment(buf.toString()))
+	];
+
+	public static var tokString = @:rule
+	[
+		'[^"]' => {
+			buf.add(lexer.current);
+			lexer.token(tokString);
+		},
+		'"' => tk(StringLiteral(buf.toString()))
 	];
 
 

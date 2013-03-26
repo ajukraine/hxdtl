@@ -22,6 +22,22 @@ class Parser extends hxparse.Parser<Token>
 		}
 	}
 
+	function any<T>(functions: Array<Void->T>): T
+	{
+		for(f in functions)
+		{
+			var expr = switch stream
+			{
+				case [e = f()]: e;
+				case _: null;
+			}
+
+			if (expr != null)
+				return expr;
+		}
+		return null;
+	}
+
 	function collect<T>(acc: Array<T>, item: T) 
 	{
 		acc.push(item);
@@ -64,12 +80,34 @@ class Parser extends hxparse.Parser<Token>
 		}
 	}
 
+
+
 	function parseValue()
 	{
-		return switch stream
+		var value = switch stream
 		{
 			case [variable = parseVariable()]: variable;
 			case [literal = parseLiteral()]: literal;
+		}
+
+		return switch stream
+		{
+			case [{tok: Pipe}, filter = parseFilter(value)]: filter;
+			case _: value;
+		}
+	}
+
+	function parseFilter(value)
+	{
+		return switch stream
+		{
+			case [{tok: Identifier(filterName)}]:
+				switch stream
+				{
+					case [{tok: DoubleDot}, arg = any([parseLiteral, parseVariable])]:
+						Filter(value, filterName, arg);
+					case _: Filter(value, filterName, null);
+				}
 		}
 	}
 
@@ -86,11 +124,11 @@ class Parser extends hxparse.Parser<Token>
 	{
 		return switch stream
 		{
-			case [{tok: Identifier(identifier)}]:
+			case [{tok: Identifier(id)}]:
 				switch stream
 				{
-					case [{tok: Dot}, v = parseVariable()]: AstExpr.Attribute(identifier, v);
-					case _: AstExpr.Variable(identifier);
+					case [{tok: Dot}, v = parseVariable()]: AstExpr.Attribute(id, v);
+					case _: AstExpr.Variable(id);
 				}
 		}
 	}

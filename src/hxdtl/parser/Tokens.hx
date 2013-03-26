@@ -36,7 +36,9 @@ enum TokenDef
 	VarOpen;
 	VarClose;
 
+	Pipe;
 	Dot;
+	DoubleDot;
 	POpen;
 	PClose;
 
