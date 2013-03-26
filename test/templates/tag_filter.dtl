@@ -1,0 +1,5 @@
+Default filter: {% filter default:"Nothing, babe" %}{% endfilter %}
+Default filter on string: {% filter default:"Ha-ha" %}I exist!{% endfilter %}
+Add filter: {% filter add:"all2one" %}
+	2{% endfilter %}
+Add filter on numbers: {% filter add:7 %}10{% endfilter %}

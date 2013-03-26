@@ -12,7 +12,7 @@ enum AstExpr
 	StringLiteral(s: String);
 	NumberLiteral(n: String);
 
-	Filter(value: AstExpr, name: String, arg: AstExpr);
+	ApplyFilter(value: Array<AstExpr>, filter: AstFilter);
 
 	Variable(id: String);
 	Attribute(id: String, v: AstExpr);
@@ -28,6 +28,12 @@ enum AstExpr
 	BinOp(op: BinaryOperator, e1: AstExpr, e2: AstExpr);
 
 	Comment(s: String);
+}
+
+enum AstFilter
+{
+	NoArgs(name: String);
+	Arg(name: String, arg: AstExpr);
 }
 
 enum UnaryOperator

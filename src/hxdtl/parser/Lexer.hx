@@ -74,6 +74,10 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 		"." => tk(Dot),
 		":" => tk(DoubleDot),
 		"|" => tk(Pipe),
+		'"' => {
+			buf = new StringBuf();
+			lexer.token(tokString);
+		},
 		"[\r\n\t ]" => lexer.token(tokInTag),
 		"[0-9]+" => tk(NumberLiteral(lexer.current)),
 		">=|<=|==|>|<|!=" => tk(Op(lexer.current)),

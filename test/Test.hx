@@ -125,6 +125,9 @@ class Test
 		return [
 			"filter_basic" => {
 				supported_filters: ["add", "length", "default"]
+			},
+			"tag_filter" => {
+				supported_filters: ["add", "length", "default"]
 			}
 		];
 	}

@@ -19,6 +19,9 @@ enum Keyword
 
 	Comment;
 	EndComment;
+
+	Filter;
+	EndFilter;
 }
 
 enum TokenDef

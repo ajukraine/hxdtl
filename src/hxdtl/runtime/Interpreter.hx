@@ -41,7 +41,7 @@ class Interpreter
 			case Variable(identifier): evalVariable(identifier, context);
 			case attrExpr = Attribute(_, _): evalAttribute(attrExpr, context);
 
-			case Filter(value, filter, arg): evalFilter(value, filter, arg, context);
+			case ApplyFilter(value, filter): evalFilter(value, filter, context);
 
 			case If(eCond, eBody): evalIf(eCond, eBody, [], context);
 			case IfElse(eCond, eBodyIf, eBodyElse): evalIf(eCond, eBodyIf, eBodyElse, context);
@@ -76,19 +76,20 @@ class Interpreter
 		}
 	}
 
-	function evalFilter(value, filterName, arg, context: Context) 
+	function evalFilter(value, filter, context: Context) 
 	{
-		var _filter = filters.getFilter(filterName);
-		var _value = evalExpression(value, context);
-		
-		if (arg != null)
+		var _value = evalExpressions(value, context);
+
+		return switch filter
 		{
-			var _arg = evalExpression(arg, context);
-			return _filter(_value, _arg);
-		}
-		else
-		{
-			return _filter(_value);
+			case NoArgs(name):
+				var _filter = filters.getFilter(name);
+				_filter(_value);
+
+			case Arg(name, arg):
+				var _filter = filters.getFilter(name);
+				var _arg = evalExpression(arg, context);
+				_filter(_value, _arg);
 		}
 	}
 
