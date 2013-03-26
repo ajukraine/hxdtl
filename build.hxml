@@ -6,6 +6,4 @@
 -dce full
 
 -neko bin/neko/Test.n
--cmd neko bin/neko/Test.n
-
-#-cpp bin/cpp
+-cmd neko bin/neko/Test.n -hxml_cmd

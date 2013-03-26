@@ -1,6 +1,8 @@
 import haxe.io.StringInput;
 import hxdtl.Environment;
 
+using Lambda;
+
 class Test
 {
 	var environment: Environment;
@@ -19,6 +21,12 @@ class Test
 
 	static function main()
 	{
+		var isRunningAsHxmlCmd = Sys.args().has("-hxml_cmd");
+		
+		var flush: Void -> Void = function () {};
+		if (isRunningAsHxmlCmd)
+			flush = setupCustomTrace();
+
 		trace("hxDtl - Haxe implmentation of Django Template Language");
 
 		var test = new Test("test/templates", [
@@ -29,6 +37,22 @@ class Test
 		]);
 		
 		test.run();
+
+		if (isRunningAsHxmlCmd)
+			flush();
+	}
+
+	static function setupCustomTrace()
+	{
+		var buffer = new String("");
+
+		haxe.Log.trace = function (v, ?infos)
+		{
+			buffer += v + '\r';
+			buffer = buffer.substr(-900);
+		};
+
+		return function () { Sys.print(buffer); };
 	}
 
 	static function test_varaible(): Map<String, Dynamic>
