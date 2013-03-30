@@ -5,5 +5,5 @@
 	<description>Haxe implementation of Django Template Language</description>
 	<version name="0.1.0">Early development</version>
 
-	<!-- <depends name="xparse" /> -->
+	<!-- <depends name="hxparse" /> -->
 </project>

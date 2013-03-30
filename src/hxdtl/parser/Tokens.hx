@@ -19,6 +19,9 @@ enum Keyword
 
 	Comment;
 	EndComment;
+
+	Filter;
+	EndFilter;
 }
 
 enum TokenDef
@@ -36,7 +39,9 @@ enum TokenDef
 	VarOpen;
 	VarClose;
 
+	Pipe;
 	Dot;
+	DoubleDot;
 	POpen;
 	PClose;
 

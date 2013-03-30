@@ -22,6 +22,22 @@ class Parser extends hxparse.Parser<Token>
 		}
 	}
 
+	function any<T>(functions: Array<Void->T>): T
+	{
+		for(f in functions)
+		{
+			var expr = switch stream
+			{
+				case [e = f()]: e;
+				case _: null;
+			}
+
+			if (expr != null)
+				return expr;
+		}
+		return null;
+	}
+
 	function collect<T>(acc: Array<T>, item: T) 
 	{
 		acc.push(item);
@@ -60,16 +76,38 @@ class Parser extends hxparse.Parser<Token>
 			case [value = inVar(parseValue)]: value;
 			case [ifExpr = parseIfBlock()]: ifExpr;
 			case [forExpr = parseForBlock()]: forExpr;
-			case [comment = parseComment()]: comment;
+			case [commentExpr = parseCommentBlock()]: commentExpr;
+			case [filterExpr = parseFilterBlock()]: filterExpr;
 		}
 	}
 
 	function parseValue()
 	{
-		return switch stream
+		var value = switch stream
 		{
 			case [variable = parseVariable()]: variable;
 			case [literal = parseLiteral()]: literal;
+		}
+
+		return switch stream
+		{
+			case [{tok: Pipe}, filter = parseFilter()]:
+				AstExpr.ApplyFilter([value], filter);
+			case _: value;
+		}
+	}
+
+	function parseFilter()
+	{
+		return switch stream
+		{
+			case [{tok: Identifier(filterName)}]:
+				switch stream
+				{
+					case [{tok: DoubleDot}, arg = any([parseLiteral, parseVariable])]:
+						AstFilter.Arg(filterName, arg);
+					case _: AstFilter.NoArgs(filterName);
+				}
 		}
 	}
 
@@ -86,11 +124,11 @@ class Parser extends hxparse.Parser<Token>
 	{
 		return switch stream
 		{
-			case [{tok: Identifier(identifier)}]:
+			case [{tok: Identifier(id)}]:
 				switch stream
 				{
-					case [{tok: Dot}, v = parseVariable()]: AstExpr.Attribute(identifier, v);
-					case _: AstExpr.Variable(identifier);
+					case [{tok: Dot}, v = parseVariable()]: AstExpr.Attribute(id, v);
+					case _: AstExpr.Variable(id);
 				}
 		}
 	}
@@ -165,7 +203,7 @@ class Parser extends hxparse.Parser<Token>
 		}
 	}
 
-	function parseComment()
+	function parseCommentBlock()
 	{
 		return switch stream
 		{
@@ -173,6 +211,17 @@ class Parser extends hxparse.Parser<Token>
 				Comment(text);
 			case [{tok: Kwd(Comment)}, {tok: Text(text)}, {tok: Kwd(EndComment)}]:
 				Comment(text);
+		}
+	}
+
+	function parseFilterBlock()
+	{
+		return switch stream
+		{
+			case [
+			{tok: Kwd(Filter)}, filter = parseFilter(),
+				filterBody = loop(parseElement), {tok: Kwd(EndFilter)}
+			]: AstExpr.ApplyFilter(filterBody, filter);
 		}
 	}
 
