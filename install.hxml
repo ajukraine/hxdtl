@@ -1,1 +1,2 @@
--cmd haxelib run mlib install -no-source-license
+-cmd haxelib run mlib package -no-source-license
+-cmd haxelib local bin/haxelib/hxdtl.zip
