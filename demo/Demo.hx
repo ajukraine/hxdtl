@@ -29,7 +29,7 @@ class Demo
 
 		trace("hxDtl - Haxe implmentation of Django Template Language");
 
-		var demo = new Demo("templates", [
+		var demo = new Demo("demo/templates", [
 			demo_varaible,
 			demo_if,
 			demo_for,

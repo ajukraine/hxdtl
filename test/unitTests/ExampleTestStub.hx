@@ -15,7 +15,6 @@ class ExampleTestIgnore
 	
 	public function new() 
 	{
-		
 	}
 	
 	@BeforeClass

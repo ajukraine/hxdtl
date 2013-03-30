@@ -1,6 +1,6 @@
--cp .
--cp ../src
--cp ../lib/hxparse/src
+-cp demo
+-cp src
+-cp lib/hxparse/src
 
 -main Demo
 -dce full

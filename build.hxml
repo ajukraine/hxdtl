@@ -1,3 +1,2 @@
 # Run demo
--cmd cd demo
--cmd haxe build.hxml
+-cmd haxe demo/demo.hxml
