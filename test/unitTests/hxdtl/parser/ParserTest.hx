@@ -1,17 +1,17 @@
 package hxdtl.parser;
 
 import massive.munit.Assert;
-import AssertAst;
+import org.hamcrest.MatchersBase;
 
-import hxdtl.parser.Parser;
 import hxdtl.parser.Ast;
 
-class ParserTest
+class ParserTest extends MatchersBase
 {
 	var parser: Parser;
 
 	public function new()
 	{
+		super();
 	}
 
 	@BeforeClass
@@ -26,13 +26,13 @@ class ParserTest
 		test_ast("Some text2",
 			[Text("Some text2")]);
 
-		test_ast("Bad bracket {{ name2 }}",
-			[Text("Bad bracket "), Variable("name2")]);
+		test_ast("Bad bracket {{ name }}",
+			[Text("Bad bracket "), Variable("name")]);
 	}
 
 	function test_ast(input: String, expected: Array<AstExpr>): Void
 	{
 		var ast = parser.parse(new haxe.io.StringInput(input));
-		AssertAst.areEqual(expected, ast.body);
+		assertThat(expected, equalTo(ast.body));
 	}
 }
