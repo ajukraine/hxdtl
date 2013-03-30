@@ -1,16 +1,16 @@
 import haxe.io.StringInput;
 import hxdtl.Environment;
 
-class Test
+class Demo
 {
 	var environment: Environment;
-	var tests: Array<Void -> Map<String, Dynamic>>;
+	var demos: Array<Void -> Map<String, Dynamic>>;
 
 	public function new(
 		templatesPath: String,
-		tests: Array<Void -> Map<String, Dynamic>>)
+		demos: Array<Void -> Map<String, Dynamic>>)
 	{
-		this.tests = tests;
+		this.demos = demos;
 
 		environment = new Environment({
 			path: templatesPath
@@ -21,17 +21,17 @@ class Test
 	{
 		trace("hxDtl - Haxe implmentation of Django Template Language");
 
-		var test = new Test("templates", [
-			test_varaible,
-			test_if,
-			test_for,
-			test_comment
+		var demo = new Demo("templates", [
+			demo_varaible,
+			demo_if,
+			demo_for,
+			demo_comment
 		]);
 		
-		test.run();
+		demo.run();
 	}
 
-	static function test_varaible(): Map<String, Dynamic>
+	static function demo_varaible(): Map<String, Dynamic>
 	{
 		return [
 			"variable_basic" => {
@@ -48,7 +48,7 @@ class Test
 		];
 	}
 
-	static function test_if(): Map<String, Dynamic>
+	static function demo_if(): Map<String, Dynamic>
 	{
 		return [
 			"tag_if" => {
@@ -74,7 +74,7 @@ class Test
 		];
 	}
 
-	static function test_for(): Map<String, Dynamic>
+	static function demo_for(): Map<String, Dynamic>
 	{
 		return [
 			"tag_for" => {
@@ -87,7 +87,7 @@ class Test
 		];
 	}
 
-	static function test_comment(): Map<String, Dynamic>
+	static function demo_comment(): Map<String, Dynamic>
 	{
 		return [
 			"tag_comment" => {},
@@ -97,20 +97,20 @@ class Test
 
 	function run()
 	{
-		for(test in tests)
+		for(demo in demos)
 		{
-			var testCases = test();
+			var demoCases = demo();
 
-			for(testName in testCases.keys())
+			for(demoName in demoCases.keys())
 			{
-				runTest(testName, testCases.get(testName));
+				rundemo(demoName, demoCases.get(demoName));
 			}
 		}
 	}
 
-	function runTest(name: String, context)
+	function rundemo(name: String, context)
 	{
-		trace('[Test] ${name}');
+		trace('[Demo] ${name}');
 
 		var tpl = environment.getTemplate('${name}.dtl');
 		trace(tpl.render(context));

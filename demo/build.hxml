@@ -2,8 +2,8 @@
 -cp ../src
 -cp ../lib/hxparse/src
 
--main Test
+-main Demo
 -dce full
 
--neko bin/Test.n
--cmd neko bin/Test.n
+-neko bin/Demo.n
+-cmd neko bin/Demo.n
