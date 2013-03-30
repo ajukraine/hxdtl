@@ -1,0 +1,9 @@
+-cp .
+-cp ../src
+-cp ../lib/hxparse/src
+
+-main Test
+-dce full
+
+-neko bin/Test.n
+-cmd neko bin/Test.n

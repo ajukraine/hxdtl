@@ -1,11 +1,3 @@
--cp src
--cp test
--cp lib/hxparse/src
-
--main Test
--dce full
-
--neko bin/neko/Test.n
--cmd neko bin/neko/Test.n
-
-#-cpp bin/cpp
+# Run demo
+-cmd cd demo
+-cmd haxe build.hxml
