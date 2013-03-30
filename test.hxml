@@ -1,0 +1,62 @@
+## Flash 9+
+-main TestMain
+-lib munit
+-lib hamcrest
+-cp src
+-cp lib/hxparse/src
+
+-cp test/unitTests
+-swf-version 11
+-swf test/unitTests/bin/as3_test.swf
+
+--next
+
+## Flash 8
+-main TestMain
+-lib munit
+-lib hamcrest
+-cp src
+-cp lib/hxparse/src
+
+-cp test/unitTests
+-swf-version 8
+-swf test/unitTests/bin/as2_test.swf
+
+--next
+
+## JavaScript
+-main TestMain
+-lib munit
+-lib hamcrest
+-cp src
+-cp lib/hxparse/src
+
+-cp test/unitTests
+-js test/unitTests/bin/js_test.js
+
+--next
+
+## Neko
+-main TestMain
+-lib munit
+-lib hamcrest
+-cp src
+-cp lib/hxparse/src
+
+-cp test/unitTests
+-neko test/unitTests/bin/neko_test.n
+
+--next
+
+## CPP
+-main TestMain
+-lib munit
+-lib hamcrest
+-cp src
+-cp lib/hxparse/src
+
+-cp test/unitTests
+#-D HXCPP_M64
+-cpp test/unitTests/bin/cpp_test
+
+
