@@ -25,7 +25,7 @@ $ haxe install.hxml
 
 Create template from string and render it:
 
-```haxe
+```as3
 import hxdtl.Template;
 
 var tpl = new Template("
@@ -42,7 +42,7 @@ trace(tpl.render(data));
 
 Get template from file system and render it:
 
-```haxe
+```as3
 import hxdtl.Template;
 import hxdtl.Environment;
 
@@ -51,8 +51,8 @@ var env = new Environment({
 	useCache: true
 });
 var tpl = env.getTemplate("some_template.dtl");
-trace(tpl.render({ Year: 2013, friend: "Billy" }));
 
+trace(tpl.render({ Year: 2013, friend: "Billy" }));
 ```
 
 [Roadmap]: https://github.com/ajukraine/hxdtl/wiki/Roadmap
