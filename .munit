@@ -2,5 +2,5 @@ version=2.0.0
 src=test/unitTests
 bin=bin/test
 report=bin/test/report
-hxml=test/test.hxml
+hxml=test.hxml
 classPaths=src,lib/hxparse/src
