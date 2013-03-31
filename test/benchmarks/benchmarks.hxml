@@ -1,0 +1,9 @@
+-cp test/benchmarks
+-cp src
+-cp lib/hxparse/src
+
+-main Loop
+-dce full
+
+-neko bin/Benchmarks.n
+-cmd neko bin/Benchmarks.n

@@ -1,5 +1,8 @@
 # Run demo
--cmd haxe demo/demo.hxml
+ -cmd haxe demo/demo.hxml
 
 # Run tests
 # -cmd haxelib run munit test -neko
+
+# Run benchmarks
+# -cmd haxe test/benchmarks/benchmarks.hxml
