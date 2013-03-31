@@ -18,7 +18,7 @@ class Template
 		ast = parser.parse(new haxe.io.StringInput(source));
 	}
 
-	public function render(context)
+	public function render<T>(context: T)
 	{
 		return interpreter.run(ast, new Context(context));
 	}
