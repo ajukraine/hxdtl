@@ -26,13 +26,31 @@ class ParserTest extends MatchersBase
 		test_ast("Some text2",
 			[Text("Some text2")]);
 
-		test_ast("Bad bracket {{ name }}",
-			[Text("Bad bracket "), Variable("name")]);
+		test_ast("Bad bracket {",
+			[Text("Bad bracket {")]);
 	}
 
-	function test_ast(input: String, expected: Array<AstExpr>): Void
+	@Test
+	public function test_if_tag(): Void
+	{
+		test_ast("{% if Last %} {% endif %}",
+			[If(NullOp(Variable("Last")), [Text(" ")])]);
+
+		test_ast("{% if Last >= _Min %}{% elif First < _Max %} Bla {% else %} {{ Result }} {% endif %}",
+			[IfElse(BinOp(GreaterOrEqual, Variable("Last"), Variable("_Min")),
+				[],
+				[IfElse(BinOp(Less, Variable("First"), Variable("_Max")),
+					[Text(" Bla ")],
+					[Text(" "), Variable("Result"), Text(" ")]
+				)]
+			)]
+		);
+	}
+
+	function test_ast<T>(input: String, expected: Array<AstExpr>): Void
 	{
 		var ast = parser.parse(new haxe.io.StringInput(input));
-		assertThat(expected, equalTo(ast.body));
+
+		assertThat(Std.string(ast.body), equalTo(Std.string(expected)));
 	}
 }

@@ -1,28 +1,28 @@
 ## Flash 9+
--main TestMain
--lib munit
--lib hamcrest
--cp src
--cp lib/hxparse/src
+# -main TestMain
+# -lib munit
+# -lib hamcrest
+# -cp src
+# -cp lib/hxparse/src
 
--cp test/unitTests
--swf-version 11
--swf bin/test/as3_test.swf
+# -cp test/unitTests
+# -swf-version 11
+# -swf bin/test/as3_test.swf
 
---next
+# --next
 
-## Flash 8
--main TestMain
--lib munit
--lib hamcrest
--cp src
--cp lib/hxparse/src
+# ## Flash 8
+# -main TestMain
+# -lib munit
+# -lib hamcrest
+# -cp src
+# -cp lib/hxparse/src
 
--cp test/unitTests
--swf-version 8
--swf bin/test/as2_test.swf
+# -cp test/unitTests
+# -swf-version 8
+# -swf bin/test/as2_test.swf
 
---next
+# --next
 
 ## JavaScript
 -main TestMain

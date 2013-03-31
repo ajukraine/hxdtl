@@ -1,2 +1,5 @@
 # Run demo
 -cmd haxe demo/demo.hxml
+
+# Run tests
+# -cmd haxelib run munit test -neko

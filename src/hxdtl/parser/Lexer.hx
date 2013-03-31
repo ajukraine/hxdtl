@@ -22,9 +22,22 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 	static var keywords = @:mapping Keyword;
 
 	static var buf = new StringBuf();
+	static function bufOpen()
+	{
+		if (buf == null)
+			buf = new StringBuf();
+	}
+	static function bufClose()
+	{
+		var str = buf.toString();
+		buf = null;
+		return str;
+	}
 
 	static var comment = "comment";
 	static var endcomment = "endcomment";
+
+	static var identifier = "_*[a-zA-Z][a-zA-Z0-9_]*|_+[0-9][_a-zA-Z0-9]*";
 
 	public static var tok = @:rule
 	[
@@ -38,7 +51,7 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 			lexer.token(inCodeTag(lexer));
 		},
 		"{#" => {
-			buf = new StringBuf();
+			bufOpen();
 			lexer.token(tokComment);
 		}
 	];
@@ -49,11 +62,11 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 		":" => tk(DoubleDot),
 		"|" => tk(Pipe),
 		'"' => {
-			buf = new StringBuf();
+			bufOpen();
 			lexer.token(tokString);
 		},
 		"[\r\n\t ]" => lexer.token(tokInVar),
-		"[_a-zA-Z]*" => {
+		identifier => {
 			var cur = lexer.current;
 			var kwd = keywords.get(cur);
 
@@ -75,7 +88,7 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 		":" => tk(DoubleDot),
 		"|" => tk(Pipe),
 		'"' => {
-			buf = new StringBuf();
+			bufOpen();
 			lexer.token(tokString);
 		},
 		"[\r\n\t ]" => lexer.token(tokInTag),
@@ -85,7 +98,7 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 			inCommentTag(lexer);
 			tk(Kwd(Comment));
 		},
-		"[_a-zA-Z]*" => {
+		identifier => {
 			var cur = lexer.current;
 			var kwd = keywords.get(cur);
 
@@ -116,7 +129,7 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 			buf.add(lexer.current);
 			lexer.token(tokComment);
 		},
-		"#}" => tk(Comment(buf.toString()))
+		"#}" => tk(Comment(bufClose()))
 	];
 
 	public static var tokString = @:rule
@@ -125,7 +138,7 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 			buf.add(lexer.current);
 			lexer.token(tokString);
 		},
-		'"' => tk(StringLiteral(buf.toString()))
+		'"' => tk(StringLiteral(bufClose()))
 	];
 
 
