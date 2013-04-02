@@ -8,7 +8,7 @@ import hxdtl.runtime.Context;
 class Template
 {
 	var interpreter: Interpreter;
-	var ast: Ast;
+	var ast: TAst;
 	
 	public function new(source: String)
 	{

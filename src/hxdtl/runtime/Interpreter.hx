@@ -13,12 +13,12 @@ class Interpreter
 		filters = new Filters();
 	}
 
-	public function run(ast: Ast, context: Context): String
+	public function run(ast: TAst, context: Context): String
 	{
-		return evalExpressions(ast.body, context);
+		return evalExpressions(ast, context);
 	}
 
-	function evalExpressions(expressions: Array<AstExpr>, context: Context)
+	function evalExpressions(expressions: TAst, context: Context)
 	{
 		var result = new StringBuf();
 		for(expr in expressions)

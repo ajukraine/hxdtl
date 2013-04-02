@@ -1,39 +1,47 @@
 package hxdtl.parser;
 
-typedef Ast =
-{
-	body: Array<AstExpr>
-}
+typedef TAst = Array<Expr>;
 
-enum AstExpr
+/*enum Statement
+{
+	Text(text: String);
+	
+	If(cond: Expr, body: TAst);
+	IfElse(cond: Expr, ifBody: TAst, elseBody: TAst);
+	
+	For(iterator: String, list: String, body: TAst);
+	ForEmpty(iterator: String, list: String, body: TAst, emptyBody: TAst);
+}*/
+
+enum Expr
 {
 	Text(s: String);
 
 	StringLiteral(s: String);
 	NumberLiteral(n: String);
 
-	ApplyFilter(value: Array<AstExpr>, filter: AstFilter);
+	ApplyFilter(value: TAst, filter: Filter);
 
 	Variable(id: String);
-	Attribute(id: String, v: AstExpr);
+	Attribute(id: String, v: Expr);
 
-	If(cond: AstExpr, body: Array<AstExpr>);
-	IfElse(cond: AstExpr, ifBody: Array<AstExpr>, elseBody: Array<AstExpr>);
+	If(cond: Expr, body: TAst);
+	IfElse(cond: Expr, ifBody: TAst, elseBody: TAst);
 
-	For(id: String, idList: String, body: Array<AstExpr>);
-	ForEmpty(id: String, idList: String, body: Array<AstExpr>, emptyBody: Array<AstExpr>);
+	For(id: String, idList: String, body: TAst);
+	ForEmpty(id: String, idList: String, body: TAst, emptyBody: TAst);
 
-	NullOp(e: AstExpr);
-	UnOp(op: UnaryOperator, e: AstExpr);
-	BinOp(op: BinaryOperator, e1: AstExpr, e2: AstExpr);
+	NullOp(e: Expr);
+	UnOp(op: UnaryOperator, e: Expr);
+	BinOp(op: BinaryOperator, e1: Expr, e2: Expr);
 
 	Comment(s: String);
 }
 
-enum AstFilter
+enum Filter
 {
 	NoArgs(name: String);
-	Arg(name: String, arg: AstExpr);
+	Arg(name: String, arg: Expr);
 }
 
 enum UnaryOperator

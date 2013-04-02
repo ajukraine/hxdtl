@@ -16,10 +16,7 @@ class Parser extends hxparse.Parser<Token>
 		stream = new hxparse.LexerStream(lexer, Lexer.tok);
 		lexer.lexerStream = stream;
 
-		return
-		{
-			body: loop(parseElement)
-		}
+		return loop(parseElement);
 	}
 
 	function any<T>(functions: Array<Void->T>): T
@@ -70,7 +67,7 @@ class Parser extends hxparse.Parser<Token>
 
 	function parseElement() return switch stream
 	{
-		case [{tok: Text(t)}]: AstExpr.Text(t);
+		case [{tok: Text(t)}]: Expr.Text(t);
 		case [value = inVar(parseValue)]: value;
 		case [ifExpr = parseIfBlock()]: ifExpr;
 		case [forExpr = parseForBlock()]: forExpr;
@@ -88,7 +85,7 @@ class Parser extends hxparse.Parser<Token>
 
 		return switch stream
 		{
-			case [{tok: Pipe}, filter = parseFilter()]: AstExpr.ApplyFilter([value], filter);
+			case [{tok: Pipe}, filter = parseFilter()]: Expr.ApplyFilter([value], filter);
 			case _: value;
 		}
 	}
@@ -98,23 +95,23 @@ class Parser extends hxparse.Parser<Token>
 		case [{tok: Identifier(filterName)}]: switch stream
 		{
 			case [{tok: DoubleDot}, arg = any([parseLiteral, parseVariable])]:
-				AstFilter.Arg(filterName, arg);
-			case _: AstFilter.NoArgs(filterName);
+				Ast.Filter.Arg(filterName, arg);
+			case _: Ast.Filter.NoArgs(filterName);
 		}
 	}
 
 	function parseLiteral() return switch stream
 	{
-		case [{tok: NumberLiteral(n)}]: AstExpr.NumberLiteral(n);
-		case [{tok: StringLiteral(s)}]: AstExpr.StringLiteral(s);
+		case [{tok: NumberLiteral(n)}]: Expr.NumberLiteral(n);
+		case [{tok: StringLiteral(s)}]: Expr.StringLiteral(s);
 	}
 
 	function parseVariable() return switch stream
 	{
 		case [{tok: Identifier(id)}]: switch stream
 		{
-			case [{tok: Dot}, v = parseVariable()]: AstExpr.Attribute(id, v);
-			case _: AstExpr.Variable(id);
+			case [{tok: Dot}, v = parseVariable()]: Expr.Attribute(id, v);
+			case _: Expr.Variable(id);
 		}
 	}
 
@@ -128,11 +125,11 @@ class Parser extends hxparse.Parser<Token>
 		case [ifCond = parseIfCondition(), ifBody = loop(parseElement)]: switch stream
 		{
 			case [{tok: Kwd(EndIf)}]:
-				AstExpr.If(ifCond, ifBody);
+				Expr.If(ifCond, ifBody);
 			case [{tok: Kwd(Else)}, elseBody = loop(parseElement), {tok: Kwd(EndIf)}]:
-				AstExpr.IfElse(ifCond, ifBody, elseBody);
+				Expr.IfElse(ifCond, ifBody, elseBody);
 			case [{tok: Kwd(Elif)}]:
-				AstExpr.IfElse(ifCond, ifBody, [parseIfBlockBody()]);
+				Expr.IfElse(ifCond, ifBody, [parseIfBlockBody()]);
 		}
 	}
 
@@ -140,7 +137,7 @@ class Parser extends hxparse.Parser<Token>
 	{
 		case [part = parseIfConditionPart()]: switch stream
 		{
-			case [op1 = parseBinOp1()]: AstExpr.BinOp(op1, part, parseIfCondition());
+			case [op1 = parseBinOp1()]: Expr.BinOp(op1, part, parseIfCondition());
 			case _: part;
 		}
 	}
@@ -149,10 +146,10 @@ class Parser extends hxparse.Parser<Token>
 	{
 		case [v1 = parseValue()]: switch stream
 		{
-			case [op2 = parseBinOp2(), v2 = parseValue()]: AstExpr.BinOp(op2, v1, v2);
-			case _: AstExpr.NullOp(v1);
+			case [op2 = parseBinOp2(), v2 = parseValue()]: Expr.BinOp(op2, v1, v2);
+			case _: Expr.NullOp(v1);
 		}
-		case [op = parseUnOp(), v = parseValue()]: AstExpr.UnOp(op, v);
+		case [op = parseUnOp(), v = parseValue()]: Expr.UnOp(op, v);
 	}
 
 	function parseForBlock() return switch stream
@@ -161,9 +158,9 @@ class Parser extends hxparse.Parser<Token>
 			body = loop(parseElement)]: switch stream
 		{
 			case [{tok: Kwd(EndFor)}]:
-				AstExpr.For(id, idList, body);
+				Expr.For(id, idList, body);
 			case [{tok: Kwd(Empty)}, emptyBody = loop(parseElement), {tok: Kwd(EndFor)}]:
-				AstExpr.ForEmpty(id, idList, body, emptyBody);
+				Expr.ForEmpty(id, idList, body, emptyBody);
 		}
 	}
 
@@ -176,7 +173,7 @@ class Parser extends hxparse.Parser<Token>
 	function parseFilterBlock() return switch stream
 	{
 		case [{tok: Kwd(Filter)}, filter = parseFilter(), filterBody = loop(parseElement), {tok: Kwd(EndFilter)}]:
-			AstExpr.ApplyFilter(filterBody, filter);
+			Expr.ApplyFilter(filterBody, filter);
 	}
 
 	function parseUnOp() return switch stream
