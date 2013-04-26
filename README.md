@@ -1,8 +1,8 @@
-# HxDTL [![Build Status](https://api.travis-ci.org/ajukraine/hxdtl.png)](https://api.travis-ci.org/ajukraine/hxdtl)
+# HxDTL 
 
 HxDTL is a Haxe implementation of Django Template Language.
 
-## Status
+## Status [![Build Status](https://api.travis-ci.org/ajukraine/hxdtl.png)](https://travis-ci.org/ajukraine/hxdtl)
 Current release: [HxDtl 0.1.0](https://github.com/ajukraine/hxdtl/wiki/Roadmap#hxdtl-010). Be aware of the changes to the API - it's not stable and will be modified in future releases.
 
 You can also explore [Roadmap][Roadmap] to see the upcoming release details.
