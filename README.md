@@ -1,4 +1,4 @@
-# HxDTL
+# HxDTL [![Build Status](https://api.travis-ci.org/ajukraine/hxdtl.png)](https://api.travis-ci.org/ajukraine/hxdtl)
 
 HxDTL is a Haxe implementation of Django Template Language.
 
