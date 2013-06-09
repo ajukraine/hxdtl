@@ -1,9 +1,0 @@
-<project name="hxdtl" url="https://github.com/ajukraine/hxdtl" license="MIT">
-	<user name="ajukraine" />
-	<tag v="cross" />
-	<tag v="template" />
-	<description>Haxe implementation of Django Template Language</description>
-	<version name="0.1.0">Early development</version>
-
-	<!-- <depends name="hxparse" /> -->
-</project>

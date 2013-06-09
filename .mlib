@@ -1,7 +1,6 @@
 <mlib bin="bin/haxelib">
 	<resources>
 		<resource type="src" path="src" />
-		<resource type="src" path="lib/hxparse/src" />
 		<resource type="license" path="resource/license.mtt" />
 	</resources>
 </mlib>
