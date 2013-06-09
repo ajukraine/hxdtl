@@ -1,0 +1,13 @@
+{
+	"name": "hxdtl",
+	"license": "MIT",
+	"tags": ["cross","template"],
+	"description": "Haxe implementation of Django Template Language",
+	"contributors": ["ajukraine"],
+	"releasenote": "Support of Haxe 3.0.0",
+	"version": "0.1.1",
+	"url": "https://github.com/ajukraine/hxdtl",
+	"dependencies": {
+		"hxparse": ""
+	}
+}
