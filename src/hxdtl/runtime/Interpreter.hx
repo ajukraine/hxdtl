@@ -31,7 +31,7 @@ class Interpreter
 		return result.toString();
 	}
 
-	function evalExpression<T>(expr, context): T
+	function evalExpression(expr, context): Dynamic
 	{
 		return switch expr
 		{
