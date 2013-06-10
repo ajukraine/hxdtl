@@ -1,4 +1,4 @@
 @echo off
-cd bin
-neko hxdtl.n
+
+haxelib run munit test
 pause
