@@ -19,8 +19,6 @@ enum LexerState
 
 class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 {
-	static var keywords = @:mapping Keyword;
-
 	static var buf = new StringBuf();
 	static function bufOpen()
 	{
@@ -33,6 +31,8 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 		buf = null;
 		return str;
 	}
+
+	static var keywords = @:mapping Keyword;
 
 	static var comment = "comment";
 	static var endcomment = "endcomment";
@@ -144,7 +144,7 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 
 	public var lexerStream: hxparse.LexerStream<Token> ;
 
-	static function tk(token)
+	static function tk(token): Token
 	{
 		return { tok: token }
 	}

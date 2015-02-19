@@ -1,6 +1,5 @@
 package hxdtl.parser; 
 
-
 enum Keyword
 {
 	If;
@@ -52,5 +51,6 @@ enum TokenDef
 
 typedef Token =
 {
-	tok: TokenDef
+	tok: TokenDef,
+	?pos: Int
 }

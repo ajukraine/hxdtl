@@ -4,7 +4,7 @@ import hxdtl.Template;
 
 typedef Configuration =
 {
-	/**	Templates base path */
+	/** Templates base path */
 	path: String,
 	/** Should cache be used? */
 	?useCache: Bool
@@ -17,11 +17,19 @@ class Environment
 
 	public function new(config: Configuration)
 	{
-		this.config = config;
-		if (this.config.useCache == null)
-			this.config.useCache = true;
-
+		this.config = makeConfig(config);
 		cache = new Map<String, Template>();
+	}
+
+	function makeConfig(config: Configuration) 
+	{
+		function optional(value, defaultValue) {
+			return value == null ? defaultValue : value;
+		}
+		return {
+			path: config.path,
+			useCache: optional(config.useCache, true)
+		};
 	}
 
 	public function getTemplate(name): Template

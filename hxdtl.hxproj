@@ -45,7 +45,7 @@
   <options>
     <option showHiddenPaths="True" />
     <option testMovie="Custom" />
-    <option testMovieCommand="run.bat" />
+    <option testMovieCommand="Run.bat" />
   </options>
   <!-- Plugin storage -->
   <storage />
