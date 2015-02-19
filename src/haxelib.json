@@ -4,10 +4,10 @@
 	"tags": ["cross","template"],
 	"description": "Haxe implementation of Django Template Language",
 	"contributors": ["ajukraine"],
-	"releasenote": "Support of Haxe 3.0.0",
-	"version": "0.1.1",
+	"releasenote": "Works only with hxparse 1.0.0",
+	"version": "0.1.2",
 	"url": "https://github.com/ajukraine/hxdtl",
 	"dependencies": {
-		"hxparse": ""
+		"hxparse": "1.0.0"
 	}
 }
