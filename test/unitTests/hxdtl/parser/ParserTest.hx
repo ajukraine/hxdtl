@@ -47,10 +47,10 @@ class ParserTest extends MatchersBase
 		);
 	}
 
-	function test_ast<T>(input: String, expected: Array<AstExpr>): Void
+	function test_ast<T>(input: String, expected: Array<Expr>): Void
 	{
 		var ast = parser.parse(new haxe.io.StringInput(input));
 
-		assertThat(Std.string(ast.body), equalTo(Std.string(expected)));
+		assertThat(Std.string(ast), equalTo(Std.string(expected)));
 	}
 }
