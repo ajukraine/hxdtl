@@ -4,6 +4,3 @@
 [submodule "doc/wiki"]
 	path = doc/wiki
 	url = https://github.com/ajukraine/hxdtl.wiki.git
-[submodule "lib/hamcrest"]
-	path = lib/hamcrest
-	url = https://github.com/ajukraine/hamcrest-haxe.git
