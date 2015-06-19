@@ -3,18 +3,20 @@ package hxdtl.parser;
 import hxdtl.parser.Tokens;
 import hxdtl.parser.Ast;
 
-class Parser extends hxparse.Parser<Token> 
+class Parser extends hxparse.Parser<Lexer.CustomTokenSource, Token> implements hxparse.ParserBuilder
 {
 	public function new()
 	{
 		super(null);
 	}
 
-	public function parse(input: haxe.io.Input)
+	public function parse(input: String)
 	{
-		var lexer = new Lexer(input);
-		stream = new hxparse.LexerStream(lexer, Lexer.tok);
-		lexer.lexerStream = stream;
+		var lexer = new Lexer(byte.ByteData.ofString(input));
+		var tokenSource = new Lexer.CustomTokenSource(lexer, Lexer.tok);
+
+		lexer.lexerStream = tokenSource;
+		stream = tokenSource;
 
 		return loop(parseElement);
 	}
@@ -32,10 +34,11 @@ class Parser extends hxparse.Parser<Token>
 			if (expr != null)
 				return expr;
 		}
+
 		return null;
 	}
 
-	function collect<T>(acc: Array<T>, item: T) 
+	function collect<T>(acc: Array<T>, item: T)
 	{
 		acc.push(item);
 		return acc;
@@ -46,7 +49,7 @@ class Parser extends hxparse.Parser<Token>
 		return loopAndFill(f, []);
 	}
 
-	function loopAndFill<T>(f:Void->T, acc:Array<T>): Array<T> 
+	function loopAndFill<T>(f:Void->T, acc:Array<T>): Array<T>
 	{
 		return switch stream
 		{
@@ -81,13 +84,13 @@ class Parser extends hxparse.Parser<Token>
 		{
 			case [variable = parseVariable()]: variable;
 			case [literal = parseLiteral()]: literal;
-		}
+		};
 
 		return switch stream
 		{
 			case [{tok: Pipe}, filter = parseFilter()]: Expr.ApplyFilter([value], filter);
 			case _: value;
-		}
+		};
 	}
 
 	function parseFilter() return switch stream
@@ -108,7 +111,7 @@ class Parser extends hxparse.Parser<Token>
 
 	function parseVariable() return switch stream
 	{
-		case [{tok: Identifier(id)}]: switch stream
+		case [{tok: Identifier(id)}]: return switch stream
 		{
 			case [{tok: Dot}, v = parseVariable()]: Expr.Attribute(id, v);
 			case _: Expr.Variable(id);
@@ -124,9 +127,9 @@ class Parser extends hxparse.Parser<Token>
 	{
 		case [ifCond = parseIfCondition(), ifBody = loop(parseElement)]: switch stream
 		{
-			case [{tok: Kwd(EndIf)}]:
+			case [{tok: Kwd(Endif)}]:
 				Expr.If(ifCond, ifBody);
-			case [{tok: Kwd(Else)}, elseBody = loop(parseElement), {tok: Kwd(EndIf)}]:
+			case [{tok: Kwd(Else)}, elseBody = loop(parseElement), {tok: Kwd(Endif)}]:
 				Expr.IfElse(ifCond, ifBody, elseBody);
 			case [{tok: Kwd(Elif)}]:
 				Expr.IfElse(ifCond, ifBody, [parseIfBlockBody()]);
@@ -157,9 +160,9 @@ class Parser extends hxparse.Parser<Token>
 		case [{tok: Kwd(For)}, {tok: Identifier(id)}, {tok: Kwd(In)}, {tok: Identifier(idList)},
 			body = loop(parseElement)]: switch stream
 		{
-			case [{tok: Kwd(EndFor)}]:
+			case [{tok: Kwd(Endfor)}]:
 				Expr.For(id, idList, body);
-			case [{tok: Kwd(Empty)}, emptyBody = loop(parseElement), {tok: Kwd(EndFor)}]:
+			case [{tok: Kwd(Empty)}, emptyBody = loop(parseElement), {tok: Kwd(Endfor)}]:
 				Expr.ForEmpty(id, idList, body, emptyBody);
 		}
 	}
@@ -167,12 +170,12 @@ class Parser extends hxparse.Parser<Token>
 	function parseCommentBlock() return switch stream
 	{
 		case [{tok: Comment(text)}]: Comment(text);
-		case [{tok: Kwd(Comment)}, {tok: Text(text)}, {tok: Kwd(EndComment)}]: Comment(text);
+		case [{tok: Kwd(Comment)}, {tok: Text(text)}, {tok: Kwd(Endcomment)}]: Comment(text);
 	}
 
 	function parseFilterBlock() return switch stream
 	{
-		case [{tok: Kwd(Filter)}, filter = parseFilter(), filterBody = loop(parseElement), {tok: Kwd(EndFilter)}]:
+		case [{tok: Kwd(Filter)}, filter = parseFilter(), filterBody = loop(parseElement), {tok: Kwd(Endfilter)}]:
 			Expr.ApplyFilter(filterBody, filter);
 	}
 

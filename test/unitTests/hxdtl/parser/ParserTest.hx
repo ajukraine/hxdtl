@@ -49,7 +49,9 @@ class ParserTest extends MatchersBase
 
 	function test_ast<T>(input: String, expected: Array<Expr>): Void
 	{
-		var ast = parser.parse(new haxe.io.StringInput(input));
+		// var parser = new Parser();
+		var ast = parser.parse(input);
+		trace(ast);
 
 		assertThat(Std.string(ast), equalTo(Std.string(expected)));
 	}

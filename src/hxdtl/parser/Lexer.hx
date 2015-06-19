@@ -1,6 +1,5 @@
 package hxdtl.parser;
 
-import hxparse.Types;
 import hxdtl.parser.Tokens;
 
 
@@ -15,6 +14,25 @@ enum LexerState
 {
 	InText;
 	InCode(c: Code);
+}
+
+class CustomTokenSource
+{
+	var lexer:Lexer;
+	public var ruleset:hxparse.Ruleset<Token>;
+
+	public function new(lexer, ruleset){
+		this.lexer = lexer;
+		this.ruleset = ruleset;
+	}
+
+	public function token(): Token {
+		return lexer.token(ruleset);
+	}
+
+	public function curPos():hxparse.Position{
+		return lexer.curPos();
+	}
 }
 
 class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
@@ -58,7 +76,7 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 
 	public static var tokInVar = @:rule
 	[
-		"." => tk(Dot),
+		"\\." => tk(Dot),
 		":" => tk(DoubleDot),
 		"|" => tk(Pipe),
 		'"' => {
@@ -84,7 +102,7 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 
 	public static var tokInTag = @:rule
 	[
-		"." => tk(Dot),
+		"\\." => tk(Dot),
 		":" => tk(DoubleDot),
 		"|" => tk(Pipe),
 		'"' => {
@@ -119,7 +137,7 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 		},
 		"{%[ ]*" + endcomment + "[ ]*%}" => {
 			inText(lexer);
-			tk(Kwd(EndComment));
+			tk(Kwd(Endcomment));
 		}
 	];
 
@@ -142,11 +160,11 @@ class Lexer extends hxparse.Lexer implements hxparse.RuleBuilder
 	];
 
 
-	public var lexerStream: hxparse.LexerStream<Token> ;
+	public var lexerStream: CustomTokenSource;
 
 	static function tk(token): Token
 	{
-		return { tok: token }
+		return new Token(token, null);
 	}
 
 	static function inText(lexer)

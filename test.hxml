@@ -28,6 +28,7 @@
 -main TestMain
 -lib munit
 -lib hamcrest
+-lib hxparse
 -cp src
 -cp lib/hxparse/src
 
@@ -40,6 +41,7 @@
 -main TestMain
 -lib munit
 -lib hamcrest
+-lib hxparse
 -cp src
 -cp lib/hxparse/src
 
@@ -52,6 +54,7 @@
 -main TestMain
 -lib munit
 -lib hamcrest
+-lib hxparse
 -cp src
 -cp lib/hxparse/src
 

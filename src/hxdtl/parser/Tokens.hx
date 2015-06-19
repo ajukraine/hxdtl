@@ -5,22 +5,22 @@ enum Keyword
 	If;
 	Elif;
 	Else;
-	EndIf;
+	Endif;
 
 	For;
 	In;
 	Empty;
-	EndFor;
+	Endfor;
 
 	And;
 	Or;
 	Not;
 
 	Comment;
-	EndComment;
+	Endcomment;
 
 	Filter;
-	EndFilter;
+	Endfilter;
 }
 
 enum TokenDef
@@ -49,8 +49,14 @@ enum TokenDef
 	Eof;
 }
 
-typedef Token =
+class Token
 {
-	tok: TokenDef,
-	?pos: Int
+	public var tok: TokenDef;
+	public var pos: Null<Int>;
+
+	public function new(tok: TokenDef, pos: Null<Int>)
+	{
+		this.tok = tok;
+		this.pos = pos;
+	}
 }
